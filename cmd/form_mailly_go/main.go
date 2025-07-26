@@ -1,49 +1,48 @@
 package main
 
 import (
-	"Form-Mailly-Go/internal"
-	"encoding/json"
+	"Form-Mailly-Go/internal/handler"
+	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 func main() {
-	mux := http.NewServeMux() // Router
+	logger := log.New(os.Stdout, "FORM-MAILER: ", log.LstdFlags|log.Lshortfile)
 
-	// Routes
-	mux.HandleFunc("GET /api/health", checkHealth)
-	mux.HandleFunc("POST /api/contact", handleForm)
+	// Create handlers
+	contactHandler := handler.NewContactHandler(logger)
+	healthHandler := &handler.HealthHandler{}
 
-	// Server
-	err := http.ListenAndServe(":8080", mux)
-	if err != nil {
-		panic(err)
-		return
+	// Setup router
+	mux := http.NewServeMux()
+
+	mux.Handle("GET /api/health", healthHandler)
+	mux.Handle("POST /api/contact", contactHandler)
+
+	// Configure server
+	server := &http.Server{
+		Addr:         ":8080",
+		Handler:      securityHeadersMiddleware(mux),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 
+	// Start server
+	logger.Println("Starting server on port 8080")
+	if err := server.ListenAndServe(); err != nil {
+		logger.Fatalf("Server failed: %v", err)
+	}
 }
 
-func checkHealth(res http.ResponseWriter, req *http.Request) {
-	res.WriteHeader(http.StatusOK)
-	_, err := res.Write([]byte("Everything is OK"))
-	if err != nil {
-		panic(err)
-		return
-	}
-}
-
-func handleForm(response http.ResponseWriter, request *http.Request) {
-
-	var formData internal.ContactForm
-	err := json.NewDecoder(request.Body).Decode(&formData)
-	if err != nil {
-		http.Error(response, "", http.StatusInternalServerError)
-		return
-	}
-
-	var isValid bool = internal.ValidateFormData(&formData)
-	if isValid {
-		internal.SendEmail(&formData, response)
-	} else {
-		http.Error(response, "Form data field is not valid", http.StatusBadRequest)
-	}
+func securityHeadersMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Security-Policy", "default-src 'self'")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		next.ServeHTTP(w, r)
+	})
 }
