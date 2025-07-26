@@ -1,7 +1,5 @@
 ## FormMaillyGo ⚡ - Blazing-Fast Contact Form Backend for Web
 
-
-
 *"Stop wrestling with contact forms! FormMaillyGo is a lightweight minimalist Go API that transforms submissions into emails with military-grade validation, production hardening, and serverless speed. Just POST JSON → get inbox magic."*
 
 ### Key Highlights:
@@ -69,5 +67,18 @@ SMTP_PORT=587
 ```bash
 go run main.go
 ```
-
 The server will start on port 8080.
+
+## File Structure
+
+- `main.go`: HTTP server setup, routing.
+- `internal/config/config.go`: Environment configuration loader
+- `internal/model/contact.go`: ContactForm data structure
+- `internal/service/validator.go`: Custom validation engine with email/required checks
+- `internal/service/email.go`: Email sending service with SMTP implementation
+- `internal/handler/handler.go`: API endpoint handlers with error handling
+- `internal/template/contact.go`: HTML email template builder
+- `README.md`: Project documentation and usage guide
+
+
+
