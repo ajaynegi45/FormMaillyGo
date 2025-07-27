@@ -1,84 +1,111 @@
-## FormMaillyGo ⚡ - Blazing-Fast Contact Form Backend for Web
+## FormMaillyGo – Free, Serverless Contact Form to Email Gateway
 
-*"Stop wrestling with contact forms! FormMaillyGo is a lightweight minimalist Go API that transforms submissions into emails with military-grade validation, production hardening, and serverless speed. Just POST JSON → get inbox magic."*
+**FormMaillyGo** is a lightweight backend that turns any contact form submission into a **real email** — **fast, secure, and completely free (within generous [AWS Lambda limits](https://aws.amazon.com/lambda/pricing/) )**.
 
-### Key Highlights:
-- 🚀 **15k+ req/sec** on modest hardware
-- 🔒 **Zero-dependency security**
-- 📬 **SMTP/SES/Postmark-ready** with templated emails
-- 🌩️ **Born for serverless** (Lambda/Cloudflare Workers)
-- 🛡️ **Validation Fort Knox** - stops invalid data at the gate
+### 🧑‍💻 Whom is this for?
 
-**Perfect for:** Startups, static sites, and developers who value reliability over bloat.
+* Solo developers, indie hackers, or small startups
+* Static websites (like those on Netlify, Vercel, GitHub Pages)
+* Anyone tired of paid contact form services (like Formspree, Getform, etc.)
 
-## Features
+---
 
-- **RESTful API** with endpoints for health check and contact form submission.
-- **Validates** incoming form data before processing.
-- **Automatic email notification**: Sends submitted contact form information as an email to a configured address.
-- **Configuration via `.env`** file for SMTP/Email credentials.
-- Clean and modular structure (using Go packages).
-- Simple HTML email formatting for inquiries.
-- Easy to integrate with any frontend or static site.
+## 🚀 Why Use FormMaillyGo?
 
-## Endpoints
+Most free contact form services only allow **50–100 submissions/month**. That’s *very* limited.
 
-| Method | Route            | Description                 |
-|--------|------------------|-----------------------------|
-| GET    | `/api/health`    | Health check endpoint       |
-| POST   | `/api/contact`   | Submit contact form (JSON)  |
+FormMaillyGo runs on **AWS Lambda (or any serverless platform)**, which has a **much higher free tier**. It’s ideal for scaling contact form handling **at zero or very low cost**.   
 
-## Sample `ContactForm` JSON
+You only pay if your usage goes beyond free limits — and even then, it’s cheaper than paid form services.
+
+The AWS Lambda free tier includes one million free requests per month and 400,000 GB-seconds of compute time per month
+
+---
+
+## 🛠️ How It Works
+
+1. Your frontend sends a **JSON POST** request to `/api/contact`
+2. FormMaillyGo:
+
+   * ✅ Validates input (like name, email, etc.)
+   * 📧 Formats a clean HTML email
+   * 📤 Sends the message via SMTP (Gmail, SES, Postmark, etc.)
+3. You receive the message directly in your inbox.
+
+---
+
+## 🔐 Key Benefits
+
+* **Zero dependency**: No external SDKs or vendor lock-in.
+* **Military-grade validation**: Validates names, emails, message content.
+* **Fully async-ready**: No delay to your main app.
+* **Perfect for serverless**: Cold-start optimized.
+
+---
+
+## 🧪 API Endpoints
+
+| Method | Endpoint       | Description                 |
+| ------ | -------------- | --------------------------- |
+| GET    | `/api/health`  | Check if the server is live |
+| POST   | `/api/contact` | Send contact form data      |
+
+### Example Contact Form Payload:
 
 ```json
 {
-  "name": "Your Name",
-  "email": "you@email.com",
-  "subject": "Contact Subject",
-  "message": "Your message here...",
-  "product_name": "ProductName",
-  "product_website": "https://yourproductsite.com"
+  "name": "Alice",
+  "email": "alice@email.com",
+  "subject": "Product Feedback",
+  "message": "Loved your product!",
+  "product_name": "MySite",
+  "product_website": "https://mysite.com"
 }
 ```
 
-## How it Works
+---
 
-1. The form POSTs data as JSON to `/api/contact`.
-2. The backend validates the required fields: name, email, subject, message.
-3. If valid, it formats and sends the contents as an HTML email using the SMTP settings from the `.env` file.
-4. If invalid, it responds with an HTTP 400 error.
+## 🧾 Setup
 
-## Environment Variables (`.env` required)
+### 1. Set up your `.env` file:
 
 ```
-SENDER_EMAIL=your@email.com
-SENDER_EMAIL_PASSWORD=yourpassword
-RECEIVER_EMAIL=destination@email.com
-SMTP_HOST=smtp.example.com
+SENDER_EMAIL=your@gmail.com
+SENDER_EMAIL_PASSWORD=your-gmail-app-password
+RECEIVER_EMAIL=you@example.com
+SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 ```
 
-## Getting Started
-
-1. Fill your SMTP info in `.env`.
-2. Install dependencies (Go modules, [github.com/joho/godotenv](https://github.com/joho/godotenv)).
-3. Run:
+### 2. Run the server:
 
 ```bash
 go run main.go
 ```
-The server will start on port 8080.
 
-## File Structure
+Works out-of-the-box on port **8080**.
 
-- `main.go`: HTTP server setup, routing.
-- `internal/config/config.go`: Environment configuration loader
-- `internal/model/contact.go`: ContactForm data structure
-- `internal/service/validator.go`: Custom validation engine with email/required checks
-- `internal/service/email.go`: Email sending service with SMTP implementation
-- `internal/handler/handler.go`: API endpoint handlers with error handling
-- `internal/template/contact.go`: HTML email template builder
-- `README.md`: Project documentation and usage guide
+---
 
+## 📁 File Structure (Simplified)
 
+| File                  | Role                                   |
+| --------------------- | -------------------------------------- |
+| `main.go`             | Sets up server + routes                |
+| `handler.go`          | Handles requests + JSON validation     |
+| `email.go`            | Sends emails using SMTP                |
+| `contact.go`          | Defines the contact form structure     |
+| `validator.go`        | Validates inputs like email, URL, etc. |
+| `config.go`           | Loads SMTP config from `.env`          |
+| `template/contact.go` | Generates HTML email template          |
 
+---
+
+## 🧘 Simplicity + Power
+
+FormMaillyGo gives you **control without complexity**. You get:
+
+* Unlimited usage (within AWS/GCP free tier)
+* Full validation
+* Fully customizable
+* No monthly fees
