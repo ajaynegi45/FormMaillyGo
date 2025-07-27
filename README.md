@@ -14,7 +14,7 @@
 
 Most free contact form services only allow **50–100 submissions/month**. That’s *very* limited.
 
-FormMaillyGo runs on **AWS Lambda (or any serverless platform)**, which has a **much higher free tier**. It’s ideal for scaling contact form handling **at zero or very low cost**.   
+FormMaillyGo runs on **AWS Lambda (or any serverless platform)**, which has a **much higher free tier**. It’s ideal for scaling contact form handling **at zero or ultra-low cost**.   
 
 You only pay if your usage goes beyond free limits — and even then, it’s cheaper than paid form services.
 
