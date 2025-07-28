@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://ajaynegi45.github.io/FormMaillyGo/FormMaillyGoIcon.png">
+    <title>FormMaillyGo - Free Serverless Contact Form to Email Gateway</title>
+    <meta name="description"
+          content="Turn any contact form into real emails. Fast, secure, and completely free serverless contact form backend running on AWS Lambda.">
+
+    <!-- Primary Meta Tags -->
+    <title>FormMaillyGo - Free Serverless Contact Form to Email Gateway</title>
+    <meta name="title" content="FormMaillyGo - Free Serverless Contact Form to Email Gateway" />
+    <meta name="description" content="Turn any contact form into real emails. Fast, secure, and completely free serverless contact form backend running on AWS Lambda." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ajaynegi45.github.io/FormMaillyGo/" />
+    <meta property="og:title" content="FormMaillyGo - Free Serverless Contact Form to Email Gateway" />
+    <meta property="og:description" content="Turn any contact form into real emails. Fast, secure, and completely free serverless contact form backend running on AWS Lambda." />
+    <meta property="og:image" content="https://ajaynegi45.github.io/FormMaillyGo/FormMaillyGoImage.webp" />
+
+    <!-- X (Twitter) -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://ajaynegi45.github.io/FormMaillyGo/" />
+    <meta property="twitter:title" content="FormMaillyGo - Free Serverless Contact Form to Email Gateway" />
+    <meta property="twitter:description" content="Turn any contact form into real emails. Fast, secure, and completely free serverless contact form backend running on AWS Lambda." />
+    <meta property="twitter:image" content="https://ajaynegi45.github.io/FormMaillyGo/FormMaillyGoImage.webp" />
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --accent-color: #10b981;
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --border: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+        }
+
+        .nav-brand h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        .cta-button {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .cta-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        .github-icon{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-content: center;
+            gap: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .primary-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 24px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .primary-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .primary-button.large {
+            padding: 20px 32px;
+            font-size: 18px;
+        }
+
+        .secondary-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 24px;
+            background: white;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .secondary-button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .secondary-button.large {
+            padding: 20px 32px;
+            font-size: 18px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Code Preview */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+        }
+
+        .code-preview {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            /*max-width: 500px;*/
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #334155;
+            border-bottom: 1px solid #475569;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+
+        .code-dots span:nth-child(1) {
+            background: #ef4444;
+        }
+
+        .code-dots span:nth-child(2) {
+            background: #f59e0b;
+        }
+
+        .code-dots span:nth-child(3) {
+            background: #10b981;
+        }
+
+        .file-name {
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .code-content {
+            padding: 1rem 1rem 1rem 1rem;
+        }
+
+        .code-content pre {
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.6;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        .code-content code {
+            padding-right: 1rem;
+        }
+
+        .code-tag {
+            color: #38bdf8;
+        }
+
+        .code-attr {
+            color: #fb7185;
+        }
+
+        .code-string {
+            color: #4ade80;
+        }
+
+        /* Sections */
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: var(--background);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            padding: 32px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 0;
+            background: var(--surface);
+        }
+
+        .steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .step-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .step-content code {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .step-arrow {
+            font-size: 24px;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+            background: var(--background);
+        }
+
+        .pricing-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            padding: 40px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.formmallygo {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 16px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+        }
+
+        .price span {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .pricing-card li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .pricing-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .pricing-card li.limited::before {
+            content: "✗";
+            color: #ef4444;
+        }
+
+        .pricing-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+
+        /* Perfect For Section */
+        .perfect-for {
+            padding: 80px 0;
+            background: var(--surface);
+        }
+
+        .audience-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .audience-card {
+            padding: 32px;
+            background: white;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .audience-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .audience-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .audience-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .audience-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* API Section */
+        .api-section {
+            padding: 80px 0;
+            background: var(--background);
+        }
+
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .api-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .api-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .api-method {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .api-method.get {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .api-method.post {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .api-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-family: 'Monaco', monospace;
+        }
+
+        .api-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .api-example {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .api-example h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background: var(--surface);
+        }
+
+        .cta-content {
+            text-align: center;
+        }
+
+        .cta-content h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-content p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 64px 0 32px;
+            background: var(--text-primary);
+            color: white;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 64px;
+            margin-bottom: 32px;
+        }
+
+        .footer-brand h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .footer-brand p {
+            color: #94a3b8;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .footer-column h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .steps {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .step-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pricing-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.formmallygo {
+                transform: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero {
+                padding: 100px 0 60px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .section-header h2 {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .audience-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .api-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="nav">
+    <div class="container">
+        <div class="nav-brand">
+            <h2>FormMaillyGo</h2>
+        </div>
+        <div class="nav-links">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
+            <!--            <a href="#docs" class="nav-link">Docs</a>-->
+            <a href="https://github.com/ajaynegi45/Form-Mailly-Go" class="cta-button github-icon">Github
+<!--                <span>-->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+<path d="M12 2.24902C6.51613 2.24902 2 6.70064 2 12.249C2 16.6361 4.87097 20.3781 8.87097 21.7329C9.3871 21.8297 9.54839 21.5071 9.54839 21.2813C9.54839 21.0555 9.54839 20.4103 9.51613 19.5393C6.74194 20.1845 6.16129 18.1845 6.16129 18.1845C5.70968 17.0555 5.03226 16.7329 5.03226 16.7329C4.12903 16.0877 5.06452 16.0877 5.06452 16.0877C6.06452 16.12 6.6129 17.12 6.6129 17.12C7.48387 18.6684 8.96774 18.2168 9.51613 17.9264C9.6129 17.2813 9.87097 16.8297 10.1613 16.5716C7.96774 16.3458 5.6129 15.4748 5.6129 11.6684C5.6129 10.5716 6.03226 9.70064 6.64516 9.02322C6.54839 8.79741 6.19355 7.76515 6.74194 6.37806C6.74194 6.37806 7.6129 6.11999 9.51613 7.41031C10.3226 7.18451 11.1613 7.05548 12.0323 7.05548C12.9032 7.05548 13.7742 7.15225 14.5484 7.41031C16.4516 6.15225 17.2903 6.37806 17.2903 6.37806C17.8387 7.73289 17.5161 8.79741 17.3871 9.02322C18.0323 9.70064 18.4194 10.6039 18.4194 11.6684C18.4194 15.4748 16.0645 16.3458 13.871 16.5716C14.2258 16.8942 14.5484 17.5393 14.5484 18.4426C14.5484 19.7974 14.5161 20.8619 14.5161 21.1845C14.5161 21.4426 14.7097 21.7329 15.1935 21.6361C19.129 20.3135 22 16.6039 22 12.1845C21.9677 6.70064 17.4839 2.24902 12 2.24902Z" fill="#ffffff"/>
+</svg>
+
+<!--                </span>-->
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Serverless Service</span>
+            </div>
+            <h1 class="hero-title">
+                Turn Contact Forms Into
+                <span class="gradient-text">Real Emails</span>
+            </h1>
+            <p class="hero-description">
+                FormMaillyGo is a lightweight serverless backend that converts any contact form submission into actual
+                emails.
+                Fast, secure, and completely free within your AWS Lambda generous limits.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://github.com/ajaynegi45/Form-Mailly-Go" class="primary-button">
+                    <span>Get Started Free</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="#how-it-works" class="secondary-button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 2L8 14M2 8L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                    <span>How it Works</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">1M</span>
+                    <span class="stat-label">Free requests/month</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">400K</span>
+                    <span class="stat-label">GB-seconds free</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Dependencies</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="code-preview">
+                <div class="code-header">
+                    <div class="code-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="file-name">contact-form.html</span>
+                </div>
+                <div class="code-content">
+                        <pre><code><span class="code-tag">&lt;form</span> <span class="code-attr">action</span>=<span
+                                class="code-string">"https://your-api.amazonaws.com/api/contact"</span>
+      <span class="code-attr">method</span>=<span class="code-string">"POST"</span><span class="code-tag">&gt;</span>
+  <span class="code-tag">&lt;input</span> <span class="code-attr">name</span>=<span
+                                    class="code-string">"name"</span> <span class="code-attr">type</span>=<span
+                                    class="code-string">"text"</span> <span class="code-attr">required</span><span
+                                    class="code-tag">&gt;</span>
+  <span class="code-tag">&lt;input</span> <span class="code-attr">name</span>=<span
+                                    class="code-string">"email"</span> <span class="code-attr">type</span>=<span
+                                    class="code-string">"email"</span> <span class="code-attr">required</span><span
+                                    class="code-tag">&gt;</span>
+  <span class="code-tag">&lt;textarea</span> <span class="code-attr">name</span>=<span
+                                    class="code-string">"message"</span> <span class="code-attr">required</span><span
+                                    class="code-tag">&gt;&lt;/textarea&gt;</span>
+  <span class="code-tag">&lt;button</span> <span class="code-attr">type</span>=<span class="code-string">"submit"</span><span
+                                    class="code-tag">&gt;</span>Send Message<span
+                                    class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;/form&gt;</span></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Choose FormMaillyGo?</h2>
+            <p>Built for developers who value simplicity, reliability, and cost-effectiveness</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Cold-start optimized serverless functions ensure your forms respond instantly, every time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Military-Grade Security</h3>
+                <p>Built-in validation for names, emails, and content with comprehensive security headers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Truly Free</h3>
+                <p>No monthly limits like other services. Use AWS Lambda's generous 1M requests/month for free.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Zero Dependencies</h3>
+                <p>No external SDKs or vendor lock-in. Pure Go with standard SMTP - works with any email provider.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📧</div>
+                <h3>Beautiful Emails</h3>
+                <p>Automatically formats submissions into clean, professional HTML emails delivered to your inbox.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>Auto-Scaling</h3>
+                <p>Handle everything from single messages to traffic spikes automatically without configuration.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Three simple steps to transform your static forms into powerful email gateways</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Your Form Submits</h3>
+                    <p>User fills out your contact form and submits a JSON POST request to <code>/api/contact</code></p>
+                </div>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>We Process & Validate</h3>
+                    <p>FormMaillyGo validates the input data and formats it into a beautiful HTML email template</p>
+                </div>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Email Delivered</h3>
+                    <p>Clean, professional email arrives in your inbox via SMTP (Gmail, SES, Postmark, etc.)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Comparison -->
+<section id="pricing" class="pricing">
+    <div class="container">
+        <div class="section-header">
+            <h2>Pricing That Actually Makes Sense</h2>
+            <p>Stop paying for features you don't need. FormMaillyGo scales with your success.</p>
+        </div>
+        <div class="pricing-comparison">
+            <div class="pricing-card competitor">
+                <h3>Other Services</h3>
+                <div class="price">$19<span>/month</span></div>
+                <ul>
+                    <li class="limited">50-100 submissions/month</li>
+                    <li class="limited">Basic validation</li>
+                    <li class="limited">Limited customization</li>
+                    <li class="limited">Vendor lock-in</li>
+                </ul>
+            </div>
+            <div class="pricing-card formmallygo">
+                <div class="popular-badge">Most Popular</div>
+                <h3>FormMaillyGo</h3>
+                <div class="price">FREE<span>*</span></div>
+                <ul>
+                    <li class="included">1M requests/month free</li>
+                    <li class="included">Military-grade validation</li>
+                    <li class="included">Full customization</li>
+                    <li class="included">No vendor lock-in</li>
+                    <li class="included">Beautiful HTML emails</li>
+                    <li class="included">Auto-scaling</li>
+                </ul>
+                <p class="pricing-note">*Within AWS Lambda free tier limits</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Perfect For Section -->
+<section class="perfect-for">
+    <div class="container">
+        <div class="section-header">
+            <h2>Perfect For</h2>
+        </div>
+        <div class="audience-cards">
+            <div class="audience-card">
+                <div class="audience-icon">👨‍💻</div>
+                <h3>Solo Developers</h3>
+                <p>Build and deploy contact forms without backend complexity or monthly fees eating into your
+                    budget.</p>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🚀</div>
+                <h3>Indie Hackers</h3>
+                <p>Focus on building your product, not managing contact form infrastructure. Scale worry-free.</p>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🏢</div>
+                <h3>Small Startups</h3>
+                <p>Professional contact forms that grow with your business, from MVP to millions of users.</p>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">📱</div>
+                <h3>Static Sites</h3>
+                <p>Perfect for Netlify, Vercel, GitHub Pages - add dynamic contact forms to any static website.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Endpoints -->
+<section class="api-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Simple API</h2>
+            <p>Two endpoints. That's it.</p>
+        </div>
+        <div class="api-grid">
+            <div class="api-card">
+                <div class="api-method get">GET</div>
+                <div class="api-content">
+                    <h3>/api/health</h3>
+                    <p>Check if the service is running and healthy</p>
+                </div>
+            </div>
+            <div class="api-card">
+                <div class="api-method post">POST</div>
+                <div class="api-content">
+                    <h3>/api/contact</h3>
+                    <p>Submit contact form data and send email</p>
+                </div>
+            </div>
+        </div>
+        <div class="api-example">
+            <h3>Example Request</h3>
+            <div class="code-block">
+                    <pre><code>{
+  "name": "Alice",
+  "email": "alice@email.com",
+  "subject": "Product Feedback",
+  "message": "Loved your product!",
+  "product_name": "MySite",
+  "product_website": "https://mysite.com"
+}</code></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Deploy?</h2>
+            <p>Get your serverless contact form running in minutes, not hours</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/ajaynegi45/Form-Mailly-Go" class="primary-button large">
+                    Get Started Free
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/ajaynegi45/Form-Mailly-Go" class="secondary-button large">
+                    View Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>FormMaillyGo</h3>
+                <p>Free serverless contact form to email gateway</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <!--                    <a href="#">API Reference</a>-->
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go">Documentation</a>
+                    <!--                    <a href="#">Examples</a>-->
+                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go">GitHub</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="https://ajaynegi.web.app/contact/">Contact</a>
+                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go/issues">Issues</a>
+                    <!--                    <a href="#">Community</a>-->
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 FormMaillyGo. Built with ❤️ for developers.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
