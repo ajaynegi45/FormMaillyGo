@@ -15,7 +15,7 @@ type EmailConfig struct {
 }
 
 func LoadEmailConfig() *EmailConfig {
-	envErr := godotenv.Load(".env.dev")
+	envErr := godotenv.Load(".env")
 	if envErr != nil {
 		log.Fatal("Error loading .env file")
 	}
