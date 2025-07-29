@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	// Minimal Mux Router with optimized routes
+	// Mux Router with optimized routes
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", handler.HomeHandler)
 	mux.HandleFunc("GET /api/health", handler.HealthHandler)
