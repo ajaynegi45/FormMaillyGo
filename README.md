@@ -109,3 +109,11 @@ FormMaillyGo gives you **control without complexity**. You get:
 * Full validation
 * Fully customizable
 * No monthly fees
+
+
+
+## License & Attribution
+
+This project is under MIT License
+
+Read carefully [MIT License](https://github.com/ajaynegi45/FormMaillyGo/blob/main/LICENSE) [NOTICE](https://github.com/ajaynegi45/FormMaillyGo/blob/main/NOTICE)
