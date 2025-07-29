@@ -20,10 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Additional Condition:
+---
 
-Any distributed version, derivative work, or public use of this Software — including modified versions — must visibly credit the original author:
+Additional Condition – Attribution Requirement:
 
-> This project is based on FormMaillyGo by Ajay Negi (https://github.com/ajaynegi45/Form-Mailly-Go)
+Any distributed version, derivative work, or public use of this Software — including modified versions — must visibly credit the original author, Ajay Negi, as follows:
 
-This attribution must appear prominently on the main README, website, or any user-facing documentation or UI, where applicable.
+"This project is based on FormMaillyGo by Ajay Negi (https://github.com/ajaynegi45/Form-Mailly-Go)"
+
+This attribution must appear clearly and prominently in the README file, website, documentation, or any user-facing interface, where applicable.
