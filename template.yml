@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: provided.al2023
+    Timeout: 10           # 10 seconds
+    Architectures:
+      - arm64
+    Environment:
+      Variables:
+        SENDER_EMAIL:   # set in Parameter overrides
+        SENDER_EMAIL_PASSWORD:
+        RECEIVER_EMAIL:
+        SMTP_HOST:
+        SMTP_PORT:
+        PRODUCT_NAME:
+
+Resources:
+  FormMaillyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: FormMaillyGo
+      PackageType: Zip
+      Handler: bootstrap       # entrypoint executable
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      FunctionUrlConfig:       # creates a public HTTPS endpoint
+        AuthType: NONE
+        Cors:
+          AllowOrigins: ["*"]
+          AllowMethods: ["GET","POST"]
+      Events:
+        HealthApi:
+          Type: FunctionUrl    # can also call via Events, optional
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt FormMaillyFunction.Arn
+
+  FunctionUrl:
+    Description: HTTPS URL for the function
+    Value: !GetAtt FormMaillyFunctionUrl.FunctionUrl

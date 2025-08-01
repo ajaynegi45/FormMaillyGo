@@ -3,6 +3,8 @@ package main
 import (
 	"Form-Mailly-Go/internal/handler"
 	"fmt"
+	"github.com/joho/godotenv"
+	"log"
 	"net/http"
 	"time"
 )
@@ -14,6 +16,12 @@ func main() {
 	mux.HandleFunc("GET /{$}", handler.HomeHandler)
 	mux.HandleFunc("GET /api/health", handler.HealthHandler)
 	mux.HandleFunc("POST /api/contact", handler.ContactHandler)
+
+	// Load .env files
+	envErr := godotenv.Load(".env")
+	if envErr != nil {
+		log.Fatal("Error loading .env file!")
+	}
 
 	// Configure server
 	server := &http.Server{
