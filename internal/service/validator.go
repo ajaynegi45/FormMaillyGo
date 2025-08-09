@@ -2,6 +2,7 @@ package service
 
 import (
 	"Form-Mailly-Go/internal/model"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
@@ -22,93 +23,12 @@ func (v *Validator) Required(field, value string) {
 }
 
 // Email validator
+var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+
 func (v *Validator) Email(field, value string) {
-
-	// Check for whitespace characters
-	if strings.ContainsAny(value, " \t\r\n") {
-		v.Errors = append(v.Errors, field+" cannot contain whitespace")
-		return
+	if !emailRegex.MatchString(value) {
+		v.Errors = append(v.Errors, field+" is not a valid email address")
 	}
-
-	// Must contain exactly one '@'
-	if atCount := strings.Count(value, "@"); atCount != 1 {
-		v.Errors = append(v.Errors, field+" must contain exactly one '@' character")
-		return
-	}
-
-	// Split into local and domain parts
-	parts := strings.Split(value, "@")
-	local, domain := parts[0], parts[1]
-
-	// Validate local part (before @)
-	if len(local) == 0 {
-		v.Errors = append(v.Errors, field+" local part cannot be empty")
-		return
-	}
-	if len(local) > 64 {
-		v.Errors = append(v.Errors, field+" local part exceeds 64 characters")
-		return
-	}
-	if local[0] == '.' || local[len(local)-1] == '.' {
-		v.Errors = append(v.Errors, field+" local part cannot start or end with a dot")
-		return
-	}
-	if strings.Contains(local, "..") {
-		v.Errors = append(v.Errors, field+" local part cannot contain consecutive dots")
-		return
-	}
-
-	// Validate domain part (after @)
-	if len(domain) == 0 {
-		v.Errors = append(v.Errors, field+" domain part cannot be empty")
-		return
-	}
-	if len(domain) > 255 {
-		v.Errors = append(v.Errors, field+" domain part exceeds 255 characters")
-		return
-	}
-	if domain[0] == '.' || domain[len(domain)-1] == '.' {
-		v.Errors = append(v.Errors, field+" domain cannot start or end with a dot")
-		return
-	}
-	if strings.Contains(domain, "..") {
-		v.Errors = append(v.Errors, field+" domain cannot contain consecutive dots")
-		return
-	}
-
-	// Domain must contain at least one dot
-	if !strings.Contains(domain, ".") {
-		v.Errors = append(v.Errors, field+" domain must contain a dot")
-		return
-	}
-
-	// Validate TLD (last part after dot)
-	tldParts := strings.Split(domain, ".")
-	tld := tldParts[len(tldParts)-1]
-	if len(tld) < 2 {
-		v.Errors = append(v.Errors, field+" TLD must be at least 2 characters")
-		return
-	}
-	if strings.ContainsAny(tld, "0123456789") {
-		v.Errors = append(v.Errors, field+" TLD cannot contain numbers")
-		return
-	}
-
-	// Check for invalid characters in domain
-	for _, char := range domain {
-		if !isValidDomainChar(char) {
-			v.Errors = append(v.Errors, field+" contains invalid domain character")
-			return
-		}
-	}
-}
-
-func isValidDomainChar(c rune) bool {
-	// Allow letters, digits, hyphens, and dots
-	return ('a' <= c && c <= 'z') ||
-		('A' <= c && c <= 'Z') ||
-		('0' <= c && c <= '9') ||
-		c == '-' || c == '.'
 }
 
 // URL validator

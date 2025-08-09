@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-type EmailConfig struct {
+type EnvironmentVariable struct {
 	SenderEmail    string
 	SenderPassword string
 	ReceiverEmail  string
@@ -12,8 +12,8 @@ type EmailConfig struct {
 	SMTPPort       string
 }
 
-func LoadEmailConfig() *EmailConfig {
-	return &EmailConfig{
+func LoadEnvironmentVariable() *EnvironmentVariable {
+	return &EnvironmentVariable{
 		SenderEmail:    os.Getenv("SENDER_EMAIL"),
 		SenderPassword: os.Getenv("SENDER_EMAIL_PASSWORD"),
 		ReceiverEmail:  os.Getenv("RECEIVER_EMAIL"),

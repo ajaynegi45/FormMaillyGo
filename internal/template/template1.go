@@ -2,7 +2,7 @@ package template
 
 import "Form-Mailly-Go/internal/model"
 
-func BuildContactFormMessage(form *model.ContactForm) string {
+func BuildContactFormMessage1(form *model.ContactForm) string {
 	return "<div style=\"font-family:Helvetica,Arial,sans-serif; font-size:16px; margin:0; color:#0b0c0c; background-color:#ffffff\">\n" +
 		"<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
 		"<table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n" +

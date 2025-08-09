@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Form-Mailly-Go"
 	"Form-Mailly-Go/internal/handler"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
@@ -15,7 +16,7 @@ func main() {
 
 	// Mux Router with optimized routes
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /{$}", handler.HomeHandler)
+	mux.HandleFunc("GET /{$}", Form_Mailly_Go.HomeHandler)
 	mux.HandleFunc("GET /api/health", handler.HealthHandler)
 	mux.HandleFunc("POST /api/contact", handler.ContactHandler)
 

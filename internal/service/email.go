@@ -13,10 +13,10 @@ type EmailService interface {
 }
 
 type SMTPEmailService struct {
-	config *config.EmailConfig
+	config *config.EnvironmentVariable
 }
 
-func NewSMTPEmailService(cfg *config.EmailConfig) *SMTPEmailService {
+func NewSMTPEmailService(cfg *config.EnvironmentVariable) *SMTPEmailService {
 	return &SMTPEmailService{config: cfg}
 }
 
@@ -33,7 +33,7 @@ func (s *SMTPEmailService) Send(form *model.ContactForm) error {
 			"Subject: " + form.Subject + "\r\n" +
 			"Content-Type: text/html; charset=\"UTF-8\"\r\n" +
 			"\r\n" +
-			template.BuildContactFormMessage(form),
+			template.BuildContactFormMessage2(form),
 	)
 
 	return smtp.SendMail(
