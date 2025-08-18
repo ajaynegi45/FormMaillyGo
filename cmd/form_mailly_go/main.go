@@ -17,6 +17,8 @@ func main() {
 	mux.HandleFunc("GET /{$}", Form_Mailly_Go.HomeHandler)
 	mux.HandleFunc("GET /api/health", handler.HealthHandler)
 	mux.HandleFunc("POST /api/contact", handler.ContactHandler)
+	mux.HandleFunc("POST /api/batch/contact", handler.BatchEmailHandler)
+	//mux.HandleFunc("GET /api/batch/contact", handler.BatchEmailHandler)
 
 	// Load .env files
 	envErr := godotenv.Load(".env.dev")
@@ -26,11 +28,11 @@ func main() {
 
 	// Configure server
 	server := &http.Server{
-		Addr:         ":8080",
-		Handler:      securityHeadersMiddleware(mux),
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  60 * time.Second,
+		Addr:        ":8080",
+		Handler:     securityHeadersMiddleware(mux),
+		ReadTimeout: 5 * time.Second,
+		//WriteTimeout: 10 * time.Second,
+		IdleTimeout: 60 * time.Second,
 	}
 
 	// Start server
@@ -42,6 +44,19 @@ func main() {
 
 func securityHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		// Handle preflight request
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		// Set additional security headers
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "DENY")
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
