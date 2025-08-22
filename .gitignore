@@ -49,3 +49,7 @@ go.work.sum
 *.elc
 *.un~
 .*.sw?
+
+# Credentials
+credentials.json
+event.html
