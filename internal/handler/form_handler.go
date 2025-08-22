@@ -16,7 +16,7 @@ func ContactHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	// Validator
-	errMsg := validation.ValidateContactForm(&form)
+	errMsg := validateContactForm(&form)
 	if errMsg != "" {
 		response.Header().Set("Content-Type", "application/json")
 		response.WriteHeader(http.StatusBadRequest)
@@ -39,4 +39,67 @@ func ContactHandler(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		return
 	}
+}
+
+func validateContactForm(form *model.ContactForm) string {
+	validator := validation.NewValidator()
+
+	fields := []validation.Field{
+		{
+			Name:  "name",
+			Value: &form.Name,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+				validation.MaxLengthRule(100),
+			},
+		},
+		{
+			Name:  "email",
+			Value: &form.Email,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+				validation.EmailRule(),
+				validation.MaxLengthRule(255),
+			},
+		},
+		{
+			Name:  "subject",
+			Value: &form.Subject,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+				validation.MaxLengthRule(300),
+			},
+		},
+		{
+			Name:  "message",
+			Value: &form.Message,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+			},
+		},
+		{
+			Name:  "product_name",
+			Value: &form.ProductName,
+			Rules: []validation.Rule{
+				validation.ProductNameRule(),
+			},
+		},
+		{
+			Name:  "product_website",
+			Value: &form.ProductWebsite,
+			Rules: []validation.Rule{
+				validation.UrlRule(),
+			},
+		},
+	}
+
+	for _, field := range fields {
+		validator.ValidateField(field)
+		if !validator.IsValid() {
+			// Return immediately once an error occurs
+			return validator.Error
+		}
+	}
+
+	return "" // no error found, valid form
 }
