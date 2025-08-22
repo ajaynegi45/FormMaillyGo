@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Form-Mailly-Go"
+	Form_Mailly_Go "Form-Mailly-Go"
 	"Form-Mailly-Go/internal/config"
 	"Form-Mailly-Go/internal/handler"
 	"net/http"
@@ -53,8 +53,10 @@ func applySecurityHeaders(next http.Handler) http.Handler {
 		headers := w.Header()
 		headers.Set("X-Content-Type-Options", "nosniff")                  // Prevent MIME type sniffing attacks
 		headers.Set("X-Frame-Options", "DENY")                            // Prevent clickjacking attacks
-		headers.Set("X-XSS-Protection", "1; mode=block")                  // Enable XSS protection in browsers
 		headers.Set("Referrer-Policy", "strict-origin-when-cross-origin") // Control referrer information
+		headers.Set("Referrer-Policy", "strict-origin-when-cross-origin") // Control referrer information
+		// Baseline CSP — adjust 'script-src' as needed if you serve inline scripts
+		headers.Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'")
 
 		// Enable HSTS for HTTPS connections
 		if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
@@ -64,10 +66,17 @@ func applySecurityHeaders(next http.Handler) http.Handler {
 		// CORS headers for cross-origin requests
 		headers.Set("Access-Control-Allow-Origin", "*")
 		headers.Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		headers.Set("Access-Control-Allow-Headers", "Content-Type")
+		headers.Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Accept-Language, Last-Event-ID")
+		headers.Set("Content-Type", "application/json")
+
+		headers.Add("Vary", "Origin")
+		headers.Add("Vary", "Access-Control-Request-Method")
+		headers.Add("Vary", "Access-Control-Request-Headers")
 
 		// Handle preflight requests
 		if r.Method == "OPTIONS" {
+			// Optional: cache preflight for 10 minutes
+			headers.Set("Access-Control-Max-Age", "600")
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}

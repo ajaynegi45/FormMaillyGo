@@ -7,11 +7,14 @@ import (
 	"fmt"
 	"net"
 	"net/smtp"
+	"strings"
 )
 
 func SetupNewSMTPConnection() (*smtp.Client, error) {
 	addr := config.EnvVar.SMTPHost + ":" + config.EnvVar.SMTPPort
 
+	//d := &net.Dialer{Timeout: 15 * time.Second, KeepAlive: 30 * time.Second}
+	//conn, err := d.Dial("tcp", addr)
 	// 1️⃣ TCP connect
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -26,10 +29,15 @@ func SetupNewSMTPConnection() (*smtp.Client, error) {
 
 	// 3️⃣ STARTTLS upgrade
 	if ok, _ := client.Extension("STARTTLS"); ok {
-		tlsConfig := &tls.Config{ServerName: config.EnvVar.SMTPHost}
+		tlsConfig := &tls.Config{
+			ServerName: config.EnvVar.SMTPHost,
+			MinVersion: tls.VersionTLS12, // consider TLS13 if your SMTP server supports it
+		}
 		if err = client.StartTLS(tlsConfig); err != nil {
 			return nil, fmt.Errorf("failed to start TLS: %v", err)
 		}
+	} else {
+		return nil, fmt.Errorf("SMTP server does not support STARTTLS")
 	}
 
 	// 4️⃣ Authenticate
@@ -66,9 +74,10 @@ func SendEmailUsingWorker(client *smtp.Client, email *model.Email) error {
 
 	// Composes the service message with headers and the body.
 	msg := []byte(
-		"From: " + email.ProductName + " <" + config.EnvVar.SenderEmail + ">\r\n" +
+		"From: " + sanitize(email.ProductName) + " <" + config.EnvVar.SenderEmail + ">\r\n" +
 			"To: " + to + "\r\n" +
-			"Subject: " + email.Subject + "\r\n" +
+			"Subject: " + sanitize(email.Subject) + "\r\n" +
+			"MIME-Version: 1.0\r\n" +
 			"Content-Type: text/html; charset=\"UTF-8\"\r\n" +
 			"\r\n" +
 			email.Message,
@@ -88,4 +97,10 @@ func CloseSMTPConnection(client *smtp.Client) {
 	if client != nil {
 		client.Quit()
 	}
+}
+
+func sanitize(s string) string {
+	s = strings.ReplaceAll(s, "\r", "")
+	s = strings.ReplaceAll(s, "\n", "")
+	return s
 }

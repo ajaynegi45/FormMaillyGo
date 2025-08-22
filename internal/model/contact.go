@@ -2,7 +2,7 @@ package model
 
 type ContactForm struct {
 	Name           string `json:"name"`
-	Email          string `json:"service"`
+	Email          string `json:"email"`
 	Subject        string `json:"subject"`
 	Message        string `json:"message"`
 	ProductName    string `json:"product_name,omitempty"`

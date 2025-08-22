@@ -16,6 +16,7 @@ func Send(form *model.ContactForm) error {
 			"To: " + to[0] + "\r\n" +
 			"Subject: " + form.Subject + "\r\n" +
 			"Content-Type: text/html; charset=\"UTF-8\"\r\n" +
+			"MIME-Version: 1.0\r\n" +
 			"\r\n" +
 			template.BuildContactFormMessage2(form),
 	)

@@ -1,5 +1,5 @@
 # Stage 1: Build the Go binary
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # Disable CGO, target Linux
 ENV CGO_ENABLED=0 \
@@ -15,8 +15,8 @@ RUN go mod download
 # Copy application sources
 COPY . .
 
-# Build the Lambda bootstrap binary
-RUN go build -o bootstrap aws_lambda.go
+# Build the Lambda bootstrap binary from lambda entrypoint
+RUN go build -tags=lambda.norpc -o bootstrap cmd/form_mailly_go/serverless/aws_lambda.go
 
 # Stage 2: Package for AWS Lambda custom runtime
 FROM public.ecr.aws/lambda/provided.al2023

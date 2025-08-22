@@ -31,10 +31,10 @@ var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-
 // Note: Allows empty values — use RequiredRule in combination to enforce presence.
 func EmailRule() Rule {
 	return func(field string, value *string) (bool, string) {
-		if value == nil || *value == "" {
+		if value == nil || strings.TrimSpace(*value) == "" {
 			return true, "" // Considered valid if empty
 		}
-		if !emailRegex.MatchString(*value) {
+		if !emailRegex.MatchString(strings.TrimSpace(*value)) {
 			return false, field + " is not a valid email address"
 		}
 		return true, ""
@@ -67,16 +67,19 @@ func ProductNameRule() Rule {
 // - valid URI format
 // - http/https scheme
 // - presence of host with a valid domain and TLD
+
+var tldRegex = regexp.MustCompile(`\.(?:[A-Za-z]{2,63}|xn--[A-Za-z0-9-]{2,59})$`)
+
 func UrlRule() Rule {
 	return func(field string, value *string) (bool, string) {
 		// 1. Assign default if empty
-		if strings.TrimSpace(*value) == "" {
+		if value == nil || strings.TrimSpace(*value) == "" {
 			*value = "https://ajaynegi45.github.io/FormMaillyGo/"
 			return true, ""
 		}
 
 		// 2. Parse and validate URL
-		parsedURL, err := url.ParseRequestURI(*value)
+		parsedURL, err := url.ParseRequestURI(strings.TrimSpace(*value))
 		if err != nil {
 			return false, field + " must be a valid URL"
 		}
@@ -96,13 +99,27 @@ func UrlRule() Rule {
 			return false, field + " must contain a valid domain name (like example.com)"
 		}
 
-		// 6. check for valid TLD using regex (robot strict mode)
+		// 6. check for valid TLD using regex (strict mode with IDN punycode support)
 		// e.g., domain.tld where tld = 2 to 63 characters, alphabetic
-		tldRegex := regexp.MustCompile(`\.[a-zA-Z]{2,63}$`)
 		if !tldRegex.MatchString(parsedURL.Host) {
 			return false, field + " must have a valid top-level domain (e.g., .com, .org)"
 		}
 
+		return true, ""
+	}
+}
+
+// NumericRule checks that the value consists of digits only (0-9).
+// It allows empty values — use RequiredRule in combination to enforce presence.
+func NumericRule() Rule {
+	return func(field string, value *string) (bool, string) {
+		if value == nil || *value == "" {
+			return true, "" // Considered valid if empty
+		}
+		// Match only digits
+		if !regexp.MustCompile(`^\d+$`).MatchString(*value) {
+			return false, field + " must contain only numeric characters"
+		}
 		return true, ""
 	}
 }
