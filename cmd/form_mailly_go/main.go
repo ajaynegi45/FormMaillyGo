@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Form-Mailly-Go"
+	Form_Mailly_Go "Form-Mailly-Go"
 	"Form-Mailly-Go/internal/config"
 	"Form-Mailly-Go/internal/handler"
 	"errors"
@@ -37,12 +37,6 @@ func main() {
 	//mux.HandleFunc("POST /api/contact", handler.ContactHandler)
 	mux.HandleFunc("POST /api/batch/contact", handler.BatchEmailProcessor)
 
-	// Load .env files
-	envErr := godotenv.Load(".env.dev")
-	if envErr != nil {
-		log.Fatal("Error loading .env file!")
-	}
-
 	server := &http.Server{
 		Addr:        ":8080",
 		Handler:     securityHeadersMiddleware(mux),
@@ -61,24 +55,39 @@ func main() {
 	}
 }
 
+// securityHeadersMiddleware adds essential security headers to all responses
 func securityHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		headers := w.Header()
+		headers.Set("X-Content-Type-Options", "nosniff")                  // Prevent MIME type sniffing attacks
+		headers.Set("X-Frame-Options", "DENY")                            // Prevent clickjacking attacks
+		headers.Set("Referrer-Policy", "strict-origin-when-cross-origin") // Control referrer information
+		headers.Set("Referrer-Policy", "strict-origin-when-cross-origin") // Control referrer information
+		// Baseline CSP — adjust 'script-src' as needed if you serve inline scripts
+		headers.Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'")
 
-		// Set CORS headers
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		// Enable HSTS for HTTPS connections
+		if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
+			headers.Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		}
 
-		// Handle preflight request
-		if r.Method == http.MethodOptions {
+		// CORS headers for cross-origin requests
+		headers.Set("Access-Control-Allow-Origin", "*")
+		headers.Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		headers.Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Accept-Language, Last-Event-ID")
+		headers.Set("Content-Type", "application/json")
+
+		headers.Add("Vary", "Origin")
+		headers.Add("Vary", "Access-Control-Request-Method")
+		headers.Add("Vary", "Access-Control-Request-Headers")
+
+		// Handle preflight requests
+		if r.Method == "OPTIONS" {
+			// Optional: cache preflight for 10 minutes
+			headers.Set("Access-Control-Max-Age", "600")
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-
-		// Set additional security headers
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		w.Header().Set("X-Frame-Options", "DENY")
-		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 		next.ServeHTTP(w, r)
 	})
 }
