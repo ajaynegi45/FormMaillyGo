@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"Form-Mailly-Go/internal/config"
 	"Form-Mailly-Go/internal/model"
 	"Form-Mailly-Go/internal/service"
 	"Form-Mailly-Go/internal/validation"
@@ -30,28 +29,13 @@ func ContactHandler(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// Load configuration
-	emailConfig := config.LoadEnvironmentVariable()
-
-	// Initialize services
-	emailService := service.NewSMTPEmailService(emailConfig)
-
-	if err := emailService.Send(&form); err != nil {
-		http.Error(response, `{"error": "Failed to send email"}`, http.StatusInternalServerError)
+	if err := service.Send(&form); err != nil {
+		http.Error(response, `{"error": "Failed to send service"}`, http.StatusInternalServerError)
 		return
 	}
 
 	response.WriteHeader(http.StatusCreated)
 	_, err := response.Write([]byte(`{"message": "Email sent successfully"}`))
-	if err != nil {
-		return
-	}
-}
-
-func HealthHandler(response http.ResponseWriter, request *http.Request) {
-	response.WriteHeader(http.StatusOK)
-	response.Header().Set("Content-Type", "text/html; charset=utf-8")
-	_, err := response.Write([]byte("FormMaillyGo service is running fine. ❤️"))
 	if err != nil {
 		return
 	}
