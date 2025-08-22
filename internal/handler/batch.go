@@ -22,6 +22,7 @@ var bufPool = sync.Pool{
 }
 
 func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
+	defer request.Body.Close()
 
 	totalStart := time.Now()
 
@@ -57,15 +58,17 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 	var wg sync.WaitGroup
 	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
-		go (func() error {
+		go func(workerID int) {
 			defer wg.Done()
 
 			EachSMTPWorkerStart := time.Now()
 			conn, err := service.SetupNewSMTPConnection()
 			if err != nil {
-				fmt.Printf("Worker %d: failed to setup SMTP connection: %v\n", i, err)
+				fmt.Printf("Worker %d: failed to setup SMTP connection: %v\n", workerID, err)
+				return // Bail out this worker to avoid spinning with a nil client
 			}
-			fmt.Printf("Worker %d setup time: %v\n", i, time.Since(EachSMTPWorkerStart))
+			fmt.Printf("Worker %d setup time: %v\n", workerID, time.Since(EachSMTPWorkerStart))
+
 			defer service.CloseSMTPConnection(conn)
 
 			for {
@@ -73,14 +76,14 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 
 				case <-notify:
 					fmt.Println("Client disconnected - Email processing stopped")
-					return nil
+					return
 
 				case email, ok := <-emailChan:
 					EmailSentEach := time.Now()
 
 					if !ok {
-						return nil
-					} // channel closed, no more jobs
+						return // channel closed, no more jobs
+					}
 
 					err := service.SendEmailUsingWorker(conn, &email)
 
@@ -96,7 +99,7 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 				}
 			}
 
-		})()
+		}(i)
 	}
 
 	// feeder goroutine
