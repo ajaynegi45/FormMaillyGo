@@ -79,6 +79,7 @@ func (env *EnvironmentVariable) IsValid() bool {
 			Value: &env.SMTPPort,
 			Rules: []validation.Rule{
 				validation.RequiredRule(),
+				validation.NumericRule(),
 			},
 		},
 	}
