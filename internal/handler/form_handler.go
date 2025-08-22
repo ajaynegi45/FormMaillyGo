@@ -30,7 +30,7 @@ func ContactHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	if err := service.Send(&form); err != nil {
-		http.Error(response, `{"error": "Failed to send service"}`, http.StatusInternalServerError)
+		http.Error(response, `{"error": "Failed to send email"}`, http.StatusInternalServerError)
 		return
 	}
 
