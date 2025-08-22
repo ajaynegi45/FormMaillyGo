@@ -2,13 +2,28 @@ package main
 
 import (
 	"Form-Mailly-Go"
+	"Form-Mailly-Go/internal/config"
 	"Form-Mailly-Go/internal/handler"
+	"errors"
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"runtime"
+	"runtime/debug"
 	"time"
+
+	"github.com/joho/godotenv"
 )
+
+// init runs before main and checks environment configuration
+func init() {
+	// Load .env files (for local development only)
+	if err := godotenv.Load(".env.dev"); err != nil {
+		log.Fatal("Error loading .env file!")
+	}
+	// Safely load environment variables
+	config.LoadEnvironmentVariable()
+}
 
 func main() {
 
@@ -16,9 +31,11 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", Form_Mailly_Go.HomeHandler)
 	mux.HandleFunc("GET /api/health", handler.HealthHandler)
-	mux.HandleFunc("POST /api/contact", handler.ContactHandler)
-	mux.HandleFunc("POST /api/batch/contact", handler.BatchEmailHandler)
-	//mux.HandleFunc("GET /api/batch/contact", handler.BatchEmailHandler)
+	mux.HandleFunc("GET /api/runtime-info", handler.RuntimeInfoHandler)
+	mux.HandleFunc("GET /api/metrics", handler.MetricsHandler)
+
+	//mux.HandleFunc("POST /api/contact", handler.ContactHandler)
+	mux.HandleFunc("POST /api/batch/contact", handler.BatchEmailProcessor)
 
 	// Load .env files
 	envErr := godotenv.Load(".env.dev")
@@ -26,19 +43,21 @@ func main() {
 		log.Fatal("Error loading .env file!")
 	}
 
-	// Configure server
 	server := &http.Server{
 		Addr:        ":8080",
 		Handler:     securityHeadersMiddleware(mux),
-		ReadTimeout: 5 * time.Second,
-		//WriteTimeout: 10 * time.Second,
+		ReadTimeout: 10 * time.Second,
+		//WriteTimeout: 30 * time.Second,
 		IdleTimeout: 60 * time.Second,
+		//MaxHeaderBytes: 1 << 20, // 1MB
 	}
+
+	// simulateLambdaLimits()
 
 	// Start server
 	fmt.Println("Starting server on port 8080")
-	if err := server.ListenAndServe(); err != nil {
-		fmt.Printf("Server failed: %v", err)
+	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		log.Fatalf("Server failed: %v", err)
 	}
 }
 
@@ -62,4 +81,20 @@ func securityHeadersMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 		next.ServeHTTP(w, r)
 	})
+}
+
+// simulateLambdaLimits applies Go runtime limits to mimic AWS Lambda constraints.
+func simulateLambdaLimits() {
+	const memoryLimit = 180 * (1 << 20) // ≈ 180 MiB
+	prev := debug.SetMemoryLimit(memoryLimit)
+	fmt.Printf("Memory limit set to %d bytes (previous: %d)\n", memoryLimit, prev)
+
+	// Make GC more aggressive to respect memory cap
+	//prevGOGC := debug.SetGCPercent(50)
+	//fmt.Printf("GOGC set to %d (previous: %d)\n", 50, prevGOGC)
+
+	prevProcs := runtime.GOMAXPROCS(2) // match Lambda’s 2 logical cores
+	fmt.Printf("GOMAXPROCS set to %d (previous: %d)\n", 2, prevProcs)
+
+	fmt.Println("Lambda-like constraints applied")
 }
