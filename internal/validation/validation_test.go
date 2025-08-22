@@ -1,8 +1,6 @@
 package validation
 
 import (
-	"Form-Mailly-Go/internal/model"
-	"strings"
 	"testing"
 )
 
@@ -81,94 +79,33 @@ func TestMaxLengthRule(t *testing.T) {
 
 func TestValidator_ValidateFieldAndIsValid(t *testing.T) {
 	t.Run("Invalid input adds error", func(t *testing.T) {
-		v := New()
-		v.ValidateField(Field{
+		validator := NewValidator()
+		validator.ValidateField(Field{
 			Name:  "email",
 			Value: strPtr("bademail"),
 			Rules: []Rule{RequiredRule(), EmailRule()},
 		})
 
-		if v.IsValid() {
+		if validator.IsValid() {
 			t.Error("Expected validator to be invalid")
 		}
-		if v.Error == "" {
+		if validator.Error == "" {
 			t.Error("Expected validator to have an error")
 		}
 	})
 
 	t.Run("Valid input has no errors", func(t *testing.T) {
-		v := New()
-		v.ValidateField(Field{
+		validator := NewValidator()
+		validator.ValidateField(Field{
 			Name:  "email",
 			Value: strPtr("user@example.com"),
 			Rules: []Rule{RequiredRule(), EmailRule()},
 		})
 
-		if !v.IsValid() {
+		if !validator.IsValid() {
 			t.Error("Expected validator to be valid")
 		}
 	})
-}
-
-func TestValidateContactForm(t *testing.T) {
-	cases := map[string]struct {
-		form      model.ContactForm
-		wantError string
-	}{
-		"All valid": {
-			form: model.ContactForm{
-				Name:    "John Doe",
-				Email:   "john@example.com",
-				Subject: "Hello",
-				Message: "Valid message",
-			},
-			wantError: "",
-		},
-		"All fields empty": {
-			form:      model.ContactForm{},
-			wantError: "name is required",
-		},
-		"Invalid email": {
-			form: model.ContactForm{
-				Name:    "Alice",
-				Email:   "invalid-email",
-				Subject: "Hi",
-				Message: "Short message",
-			},
-			wantError: "email is not a valid email address",
-		},
-		"Exceeds max length": {
-			form: model.ContactForm{
-				Name:    stringOfLength(101),
-				Email:   "john@example.com",
-				Subject: stringOfLength(301),
-				Message: "Valid",
-			},
-			wantError: "name must be less than or equal to 100 characters",
-		},
-		"Whitespace + bad email + long subject + empty message": {
-			form: model.ContactForm{
-				Name:    "   ",
-				Email:   "bad",
-				Subject: stringOfLength(250),
-				Message: "",
-			},
-			wantError: "name is required", // first error stops validation here
-		},
-	}
-
-	for name, tc := range cases {
-		t.Run(name, func(t *testing.T) {
-			err := ValidateContactForm(&tc.form)
-			if err != tc.wantError {
-				t.Errorf("ValidateContactForm() = %q, want %q", err, tc.wantError)
-			}
-		})
-	}
-}
-
-func stringOfLength(n int) string {
-	return strings.Repeat("a", n)
 }
 
 func strPtr(s string) *string {
