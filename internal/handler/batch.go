@@ -3,10 +3,12 @@ package handler
 import (
 	"Form-Mailly-Go/internal/model"
 	"Form-Mailly-Go/internal/service"
+	"Form-Mailly-Go/internal/validation"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -34,8 +36,22 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 	}
 
 	// ---------------------
-	// Validate the Data
-	// ---------------------
+	// Validate the Email Data
+	for _, email := range emailList {
+
+		errMsg := validateBatchEmailData(email)
+		if errMsg != "" {
+			response.Header().Set("Content-Type", "application/json")
+			response.WriteHeader(http.StatusBadRequest)
+			err := json.NewEncoder(response).Encode(struct {
+				Error string `json:"error"`
+			}{Error: errMsg})
+			if err != nil {
+				return
+			}
+			return
+		}
+	}
 
 	// Setting headers
 	response.Header().Set("Content-Type", "text/event-stream")
@@ -103,18 +119,12 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 	}
 
 	// feeder goroutine
-	wg.Add(1)
-	go (func() error {
-		defer wg.Done()
-		DataFeeding := time.Now()
+	wg.Go(func() {
 		for _, email := range emailList {
 			emailChan <- email
 		}
-		fmt.Println("DataFeeding time taken is", time.Since(DataFeeding))
-
-		defer close(emailChan)
-		return nil
-	})()
+		close(emailChan)
+	})
 
 	// result sender: drains resultChan and streams to client
 	var resultWG sync.WaitGroup
@@ -167,4 +177,117 @@ func BatchEmailProcessor(response http.ResponseWriter, request *http.Request) {
 	resultWG.Wait()
 	totalDuration := time.Since(totalStart)
 	fmt.Println("Total time taken:", totalDuration)
+}
+
+func validateBatchEmailData(email model.Email) string {
+
+	validator := validation.NewValidator()
+	fields := []validation.Field{
+		{
+			Name:  "email",
+			Value: &email.SentTo,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+				validation.EmailRule(),
+				validation.MaxLengthRule(255),
+			},
+		},
+		{
+			Name:  "subject",
+			Value: &email.Subject,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+				validation.MaxLengthRule(300),
+			},
+		},
+		{
+			Name:  "message",
+			Value: &email.Message,
+			Rules: []validation.Rule{
+				validation.RequiredRule(),
+			},
+		},
+		{
+			Name:  "product_name",
+			Value: &email.ProductName,
+			Rules: []validation.Rule{
+				validation.ProductNameRule(),
+			},
+		},
+	}
+
+	for _, field := range fields {
+		validator.ValidateField(field)
+		if !validator.IsValid() {
+			// Return immediately once an error occurs
+			return validator.Error
+		}
+	}
+
+	return "" // no error found, valid form
+}
+
+// getNumberOfWorkers calculates the optimal number of SMTP workers for email batch processing.
+// This function is designed to handle batches ranging from 1 email to 3000+ emails efficiently.
+// It considers SMTP connection setup overhead, CPU cores, and diminishing returns from too many workers.
+func getNumberOfWorkers(batchSize int) int {
+	numCPU := runtime.NumCPU()
+
+	// Core constants based on SMTP processing characteristics
+	const (
+		// Each SMTP connection has setup/teardown overhead, so we need minimum emails per worker
+		minEmailsPerWorker = 8
+
+		// Hard ceiling to prevent SMTP server overload and resource exhaustion
+		maxWorkers = 25
+
+		// Always have at least one worker
+		minWorkers = 1
+
+		// For I/O bound SMTP operations, we can use more workers than CPU cores
+		// But not too many since each worker holds a persistent SMTP connection
+		ioMultiplier = 2.0
+	)
+
+	var workers int
+
+	// The core algorithm: balance connection overhead against parallelism benefits
+	if batchSize <= 5 {
+		// Micro batches: Single worker is most efficient
+		// Connection setup time would dominate with multiple workers
+		workers = 1
+	} else if batchSize <= 25 {
+		// Small batches: Limited workers to avoid setup overhead waste
+		// Use at most half the batch size, but respect CPU limits
+		workers = min(batchSize/2, numCPU)
+		if workers == 0 {
+			workers = 1
+		}
+	} else {
+		// Medium to large batches: Calculate based on efficiency and CPU capacity
+
+		// Calculate workers needed for efficient batch processing
+		efficiencyBasedWorkers := batchSize / minEmailsPerWorker
+
+		// Calculate workers based on CPU capacity for I/O bound work
+		cpuBasedWorkers := int(float64(numCPU) * ioMultiplier)
+
+		// Use the smaller of the two calculations to avoid over-provisioning
+		workers = min(efficiencyBasedWorkers, cpuBasedWorkers)
+
+		// For very large batches (1000+), we can be more aggressive with worker count
+		// since the connection setup cost becomes negligible per email
+		if batchSize >= 1000 {
+			workers = min(maxWorkers, batchSize/minEmailsPerWorker)
+		}
+	}
+
+	// Apply absolute bounds to prevent edge cases
+	if workers > maxWorkers {
+		workers = maxWorkers
+	} else if workers < minWorkers {
+		workers = minWorkers
+	}
+
+	return workers
 }
