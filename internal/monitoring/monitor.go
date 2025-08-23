@@ -355,3 +355,25 @@ func StartPeriodicMetricsLogging(interval time.Duration) {
 		}
 	}()
 }
+
+func PrintMemoryUsage() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+
+	fmt.Println()
+	fmt.Println("=== Memory Usage Start ===")
+	fmt.Printf("Alloc:        %.2f MB\n", float64(m.Alloc)/(1024*1024))
+	fmt.Printf("TotalAlloc:   %.2f MB\n", float64(m.TotalAlloc)/(1024*1024))
+	fmt.Printf("Sys:          %.2f MB\n", float64(m.Sys)/(1024*1024))
+	fmt.Printf("HeapAlloc:    %.2f MB\n", float64(m.HeapAlloc)/(1024*1024))
+	fmt.Printf("HeapSys:      %.2f MB\n", float64(m.HeapSys)/(1024*1024))
+	fmt.Printf("HeapIdle:     %.2f MB\n", float64(m.HeapIdle)/(1024*1024))
+	fmt.Printf("HeapInuse:    %.2f MB\n", float64(m.HeapInuse)/(1024*1024))
+	fmt.Printf("HeapReleased: %.2f MB\n", float64(m.HeapReleased)/(1024*1024))
+	fmt.Printf("StackInuse:   %.2f MB\n", float64(m.StackInuse)/(1024*1024))
+	fmt.Printf("StackSys:     %.2f MB\n", float64(m.StackSys)/(1024*1024))
+	fmt.Printf("GC Cycles:    %v\n", m.NumGC)
+	fmt.Printf("Total Pause:  %.2f ms\n", float64(m.PauseTotalNs)/1e6)
+	fmt.Println("=== Memory Usage End ===")
+	fmt.Println()
+}
