@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>FormMaillyGo Email Sender</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FormMaillyGo — API Documentation</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -26,6 +27,17 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            /*--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);*/
+
+            /*--code-background: #1e293b;*/
+            /*--header-bg: #334155;*/
+            /*--border-color: #475569;*/
+            /*--text-main: #e2e8f0;*/
+            /*--string: #4ade80;*/
+            /*--attr: #fb7185;*/
+            /*--tag: #38bdf8;*/
+            /*--shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.3);*/
+
             --code-background: #1e293b;
             --header-bg: #334155;
             --border-color: #475569;
@@ -122,7 +134,6 @@
             gap: 5px;
         }
 
-
         main {
             max-width: 900px;
             margin: 0 auto;
@@ -167,129 +178,22 @@
         }
 
 
-
-        .code-block {
-            font-family: 'Fira Code', 'Monaco', 'Menlo', monospace;
-            background: rgba(80, 94, 126, 0.8);
-            color: white;
-            padding: .2rem .4rem;
-            border-radius: 5px;
-            font-size: 14px;
-            box-shadow: var(--shadow-lg);
-        }
-
-
-        .code-preview {
-            font-family: 'Fira Code', 'Monaco', 'Menlo', monospace;
-            background: var(--code-background);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            width: 100%;
-            max-width: fit-content;
-            color: white;
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .code-block-2-container {
-            margin-top: 2rem;
-        }
-
-        .code-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .code-dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .code-dots span:nth-child(1) {
-            background: #ef4444;
-        }
-
-        .code-dots span:nth-child(2) {
-            background: #f59e0b;
-        }
-
-        .code-dots span:nth-child(3) {
-            background: #10b981;
-        }
-
-        .file-name {
-            color: #cbd5e1;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .copy-btn {
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 12px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .copy-btn.copied {
-            color: #4ade80;
-            font-weight: 500;
-        }
-
-        .code-content {
-            padding: 1rem;
-            position: relative;
-            background-color: #1e293b;
-
-        }
-
-        pre {
-            margin: 0;
-            /*white-space: pre-wrap;*/
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        /* Syntax Highlighting */
-        .cmd      { color: #facc15; }
-        .flag     { color: #38bdf8; }
-        .string   { color: #4ade80; }
-        .key      { color: #fb7185; }
-        .value    { color: #f472b6; }
-        .url      { color: #818cf8; }
-        .env      { color: #facc15; }
-        .arg      { color: #4ade80; }
-        .path     { color: #f472b6; }
+        .code-block { font-family: 'Fira Code', monospace; background: rgba(80,94,126,0.8); color: white; padding: .2rem .4rem; border-radius: 5px; font-size: 14px; box-shadow: var(--shadow-lg); }
+        .code-preview { font-family: 'Fira Code', monospace; background: var(--code-background); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-xl); width: 100%; color: white; }
+        .code-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--header-bg); border-bottom:1px solid var(--border-color); }
+        .code-dots { display:flex; gap:6px; }
+        .code-dots span { width:10px; height:10px; border-radius:50%; }
+        .code-dots span:nth-child(1){ background:#ef4444; }
+        .code-dots span:nth-child(2){ background:#f59e0b; }
+        .code-dots span:nth-child(3){ background:#10b981; }
+        .file-name{ color:#cbd5e1; font-size:12px; font-weight:500; }
+        .copy-btn{ background:none; border:none; color:#94a3b8; font-size:12px; cursor:pointer; }
+        .code-content{ padding:1rem; position:relative; background-color:var(--code-background); }
 
 
-        #status {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            background: #f9f9f9;
-        }
-
-        .success {
-            color: green;
-        }
-
-        .failed {
-            color: red;
-        }
-
+        pre { margin:0; font-size:14px; line-height:1.6; overflow-x:auto; color: #e6eef8 }
+        table{width:100%;border-collapse:collapse;margin:8px 0}
+        th,td{border:1px solid #e6eef8;padding:8px;text-align:left}
 
 
         /* Footer */
@@ -403,6 +307,8 @@
 </head>
 <body>
 
+
+
 <!-- Navigation -->
 <nav class="nav">
     <div class="container">
@@ -488,13 +394,356 @@
 </nav>
 
 <main>
-<h1>Batch Email Sender</h1>
-<button onclick="sendEmails()">Send Emails</button>
+    <h1>FormMaillyGo API Documentation</h1>
 
-<div id="status">
-    <strong>Status Updates:</strong>
-    <ul id="statusList"></ul>
-</div>
+    <h2>📧 Overview</h2>
+    <p><strong>FormMaillyGo</strong> is a powerful email service built with Go that runs on AWS Lambda. It allows you to send emails individually or in batches through simple REST API endpoints. Think of it as your personal email sending service that you can integrate into any website or application.</p>
+
+    <h2>🚀 Base URL</h2>
+    <div class="code-preview" style="margin-bottom:1rem;">
+        <div class="code-header">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <div class="file-name">Base URL</div>
+        </div>
+        <div class="code-content"><pre>https://your-lambda-function-url.amazonaws.com</pre></div>
+    </div>
+
+    <h2>📡 API Endpoints</h2>
+
+    <h3>🏠 Home Page</h3>
+    <p><strong>Purpose</strong>: Display the main page of the FormMaillyGo service.</p>
+    <div class="code-preview">
+        <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div>
+        <div class="code-content"><pre>GET /</pre></div>
+    </div>
+    <p><strong>When to use</strong>:</p>
+    <ul>
+        <li>To check if the service is running</li>
+        <li>To display a welcome page for your email service</li>
+    </ul>
+    <p><strong>Response</strong>: HTML page with service information</p>
+    <p><strong>Example</strong>:</p>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">curl</div></div><div class="code-content"><pre>curl https://your-api-url.com/</pre></div></div>
+
+    <br/>
+    <hr />
+
+    <h2>📧 Contact Form Email</h2>
+    <p><strong>Purpose</strong>: Receive contact form submissions directly to your email.</p>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div><div class="code-content"><pre>POST /api/contact</pre></div></div>
+
+    <p><strong>When to use</strong>:</p>
+    <ul>
+        <li>Contact forms on websites</li>
+    </ul>
+
+    <h4>Request Body</h4>
+    <div class="code-preview">
+        <div class="code-header">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <div class="file-name">JSON</div>
+        </div><div class="code-content"><pre>{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "subject": "Hello from my website",
+  "message": "This is a test message from the contact form.",
+  "product_name": "My Awesome Website",
+  "product_website": "https://mywebsite.com"
+}</pre></div></div>
+
+    <h4>Contact Form Field Descriptions</h4>
+    <ul>
+        <li><code>name</code> (required): Name of the person sending the email (max 100 characters)</li>
+        <li><code>email</code> (required): Valid email address of the contact form field (max 255 characters)</li>
+        <li><code>subject</code> (required): Email subject line (max 300 characters)</li>
+        <li><code>message</code> (required): Email content/body (no limit)</li>
+        <li><code>product_name</code> (optional): Name of your product/website (defaults to "FormMaillyGo")</li>
+        <li><code>product_website</code> (optional): Your website URL (defaults to FormMaillyGo URL)</li>
+    </ul>
+
+    <h4>Success Response (201)</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "message": "Email sent successfully"
+}</pre></div></div>
+
+    <h4>Error Response (400)</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "error": "email is not a valid email address"
+}</pre></div></div>
+
+    <h4>Example</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">curl</div></div><div class="code-content"><pre>curl -X POST https://your-api-url.com/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Alice Smith",
+    "email": "alice@example.com",
+    "subject": "Question about your service",
+    "message": "Hi, I have a question about pricing.",
+    "product_name": "My Store",
+    "product_website": "https://mystore.com"
+  }'</pre></div></div>
+
+    <br/>
+    <hr />
+
+    <h2>📦 Send Batch Emails</h2>
+    <p><strong>Purpose</strong>: Send multiple emails efficiently in one request.</p>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div><div class="code-content"><pre>POST /api/batch/contact</pre></div></div>
+
+    <p><strong>When to use</strong>:</p>
+    <ul>
+        <li>Newsletter sending</li>
+        <li>Marketing campaigns</li>
+        <li>Bulk notifications</li>
+        <li>Mass email sending (up to thousands of emails)</li>
+    </ul>
+
+    <h4>Request Body (Array of emails)</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>[
+  {
+    "sent_to": "user1@example.com",
+    "subject": "Welcome to our newsletter!",
+    "message": "&lt;h1>Thank you for subscribing to our newsletter.<\h1>",
+    "product_name": "My Company"
+  },
+  {
+    "sent_to": "user2@example.com",
+    "subject": "Special offer just for you!",
+    "message": "&lt;h1>Get 50% off on all products this week.<\h1>",
+    "product_name": "My Company"
+  },
+  {
+    "sent_to": "user3@example.com",
+    "subject": "Your order has been shipped",
+    "message": "&lt;h1>Your order #12345 is on its way!<\h1>",
+    "product_name": "My Store"
+  }
+]</pre></div></div>
+
+    <h4>Field Descriptions</h4>
+    <ul>
+        <li><code>sent_to</code> (required): Recipient's email address</li>
+        <li><code>subject</code> (optional): Email subject (max 300 characters)</li>
+        <li><code>message</code> (required): Email content in html format</li>
+        <li><code>product_name</code> (optional): Sender name/company</li>
+    </ul>
+
+    <h4>Response</h4>
+    <p>Server-Sent Events (SSE) stream showing real-time progress:</p>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">SSE</div></div><div class="code-content"><pre>data: {"email":"user1@example.com","status":"success"}
+
+
+data: {"email":"user2@example.com","status":"success"}
+
+
+data: {"email":"user3@example.com","status":"failed","error":"invalid email address"}</pre></div></div>
+
+    <h4>Response Fields</h4>
+    <ul>
+        <li><code>email</code>: The recipient email address</li>
+        <li><code>status</code>: Either "success" or "failed"</li>
+        <li><code>error</code>: Error message (only present if status is "failed")</li>
+    </ul>
+
+    <h4>Example</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">curl</div></div><div class="code-content"><pre>curl -X POST https://your-api-url.com/api/batch/contact \
+  -H "Content-Type: application/json" \
+  -d '[
+    {
+      "sent_to": "customer1@example.com",
+      "subject": "Thank you for your purchase",
+      "message": "Your order has been confirmed!",
+      "product_name": "Online Store"
+    },
+    {
+      "sent_to": "customer2@example.com",
+      "subject": "Welcome to our service",
+      "message": "We are excited to have you on board!",
+      "product_name": "Online Store"
+    }
+  ]'</pre></div></div>
+
+    <hr />
+
+    <h2>📋 Data Models</h2>
+
+    <h3>ContactForm Model</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "name": "string (required, max 100 chars)",
+  "email": "string (required, valid email, max 255 chars)",
+  "subject": "string (required, max 300 chars)",
+  "message": "string (required)",
+  "product_name": "string (optional)",
+  "product_website": "string (optional, valid URL)"
+}</pre></div></div>
+
+    <h3>Email Model</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "sent_to": "string (required, valid email)",
+  "subject": "string (optional, max 300 chars)",
+  "message": "string (required)",
+  "product_name": "string (optional)"
+}</pre></div></div>
+
+    <h3>EmailResult Model</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "email": "string (recipient email)",
+  "status": "string (success/failed)",
+  "error": "string (optional error message)"
+}</pre></div></div>
+
+    <hr />
+
+    <h2>Monitoring</h2>
+
+    <h3>💚 Health Check</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div><div class="code-content"><pre>GET /api/health</pre></div></div>
+    <p><strong>When to use</strong>:</p>
+    <ul>
+        <li>Monitor your service status</li>
+        <li>Set up automated health monitoring</li>
+        <li>Check before sending important emails</li>
+    </ul>
+
+    <h4>Response Structure</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "status": "healthy",
+  "timestamp": "2025-08-25T12:39:00Z",
+  "version": "1.0.0",
+  "checks": [
+    {
+      "name": "memory",
+      "status": "healthy",
+      "latency": "1.2ms"
+    },
+    {
+      "name": "goroutines",
+      "status": "healthy",
+      "latency": "0.8ms"
+    },
+    {
+      "name": "error_rate",
+      "status": "healthy",
+      "latency": "0.5ms"
+    }
+  ],
+  "metrics": {
+    "uptime": "24h30m",
+    "request_count": 150,
+    "error_count": 2,
+    "error_rate": 1.33
+  }
+}</pre></div></div>
+
+    <h3>🔧 Runtime Information</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div><div class="code-content"><pre>GET /api/runtime-info</pre></div></div>
+
+    <h4>Response Structure</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "go_version": "go1.21.0",
+  "num_cpu": 2,
+  "num_goroutine": 5,
+  "gomaxprocs": 2,
+  "memory": {
+    "alloc_bytes": 2048576,
+    "total_alloc_bytes": 5242880,
+    "sys_bytes": 8388608,
+    "heap_alloc_bytes": 2048576,
+    "heap_sys_bytes": 4194304,
+    "num_gc": 3,
+    "gc_cpu_fraction": 0.001
+  },
+  "environment": {
+    "aws_lambda_function_name": "FormMaillyGo",
+    "aws_lambda_function_version": "1",
+    "aws_region": "us-east-1"
+  }
+}</pre></div></div>
+
+    <h3>📊 Performance Metrics</h3>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">HTTP</div></div><div class="code-content"><pre>GET /api/metrics</pre></div></div>
+
+    <h4>Response Structure</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "uptime": "24h30m15s",
+  "request_count": 1250,
+  "error_count": 15,
+  "error_rate": 1.2,
+  "average_latency": "150ms",
+  "min_latency": "50ms",
+  "max_latency": "2s",
+  "requests_per_second": 0.014,
+  "emails_sent": 980,
+  "emails_failed": 20,
+  "email_success_rate": 98.0,
+  "memory_usage_bytes": 2097152,
+  "memory_peak_bytes": 4194304,
+  "goroutines": 8,
+  "goroutines_peak": 25,
+  "cpus": 2,
+  "go_version": "go1.21.0"
+}</pre></div></div>
+
+    <hr />
+
+    <h2>⚠️ Error Handling</h2>
+    <p><strong>Common HTTP Status Codes</strong></p>
+    <ul>
+        <li><strong>200 OK</strong>: Request successful</li>
+        <li><strong>201 Created</strong>: Email sent successfully</li>
+        <li><strong>400 Bad Request</strong>: Invalid input data</li>
+        <li><strong>500 Internal Server Error</strong>: Server error (email sending failed)</li>
+        <li><strong>503 Service Unavailable</strong>: Service is unhealthy</li>
+    </ul>
+
+    <h4>Validation Errors</h4>
+    <div class="code-preview"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="file-name">JSON</div></div><div class="code-content"><pre>{
+  "error": "email is not a valid email address"
+}</pre></div></div>
+
+    <p>Common validation errors:</p>
+    <ul>
+        <li>"name is required"</li>
+        <li>"email is not a valid email address"</li>
+        <li>"subject must be less than or equal to 300 characters"</li>
+        <li>"message is required"</li>
+    </ul>
+
+    <h2>🛡️ Security Features</h2>
+    <ul>
+        <li><strong>CORS Headers</strong>: Properly configured for cross-origin requests</li>
+        <li><strong>Content Security Policy</strong>: Prevents XSS attacks</li>
+        <li><strong>Input Sanitization</strong>: Cleans email headers to prevent injection</li>
+        <li><strong>TLS Encryption</strong>: All SMTP communications use TLS</li>
+        <li><strong>Rate Limiting</strong>: Built-in protection through AWS Lambda</li>
+    </ul>
+
+    <h2>📊 Performance & Scaling</h2>
+    <h3>Batch Processing Performance</h3>
+    <ul>
+        <li><strong>Small batches</strong> (1-25 emails): Uses 1-2 workers</li>
+        <li><strong>Medium batches</strong> (26-1000 emails): Uses optimal worker count based on CPU</li>
+        <li><strong>Large batches</strong> (1000+ emails): Uses up to 25 workers for maximum efficiency</li>
+    </ul>
+
+    <h3>Memory Management</h3>
+    <ul>
+        <li>Uses object pools to reduce garbage collection</li>
+        <li>Monitors memory usage and alerts if limits are approached</li>
+        <li>Automatically optimizes for AWS Lambda constraints</li>
+    </ul>
+
+    <h2>🏁 Getting Started</h2>
+    <ol>
+        <li><strong>Deploy</strong> FormMaillyGo to AWS Lambda</li>
+        <li><strong>Configure</strong> environment variables (Gmail credentials, SMTP settings)</li>
+        <li><strong>Test</strong> the service using the health endpoint</li>
+        <li><strong>Integrate</strong> the API endpoints into your application</li>
+        <li><strong>Monitor</strong> performance using the metrics endpoints</li>
+    </ol>
+
+    <p><em>Happy emailing! 📧✨</em></p>
+
 </main>
 
 <!-- Footer -->
@@ -510,19 +759,17 @@
                     <h4>Product</h4>
                     <a href="https://ajaynegi45.github.io/FormMaillyGo/#features">Features</a>
                     <a href="https://ajaynegi45.github.io/FormMaillyGo/#pricing">Pricing</a>
-                    <!--                    <a href="#">API Reference</a>-->
+
                 </div>
                 <div class="footer-column">
                     <h4>Resources</h4>
                     <a href="https://ajaynegi45.github.io/FormMaillyGo/document">Documentation</a>
-                    <!--                    <a href="#">Examples</a>-->
-                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go">GitHub</a>
+                    <a href="https://ajaynegi45.github.io/FormMaillyGo/api">API Docs</a>
                 </div>
                 <div class="footer-column">
                     <h4>Support</h4>
                     <a href="https://ajaynegi.web.app/contact/">Contact</a>
-                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go/issues">Issues</a>
-                    <!--                    <a href="#">Community</a>-->
+                    <a href="https://github.com/ajaynegi45/Form-Mailly-Go">GitHub</a>
                 </div>
             </div>
         </div>
@@ -532,98 +779,22 @@
     </div>
 </footer>
 
+
 <script>
-    function sendEmails() {
-        const payload = [
-            {
-                "sent_to": "formmailly@gmail.com",
-                "subject": "Inquiry about product",
-                "message": "<body style=\"margin:0; padding:0; font-family: Arial, sans-serif; background-color: #f4f4f4;\">   <div style=\"max-width:600px; margin:0 auto; background-color:#ffffff; border:1px solid #e0e0e0; padding:30px;\">     <h1 style=\"color:#333333; font-size:24px;\">Introducing FormMaillyGo 🚀</h1>     <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0;\">       Looking for a fast, reliable, and free solution to handle contact form submissions without a backend?     </p>      <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0;\">       <strong>FormMaillyGo</strong> lets you connect any HTML form to your email inbox in seconds – no server or backend coding required.     </p>      <ul style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0; padding-left:20px;\">       <li>⚡ Free & open-source</li>       <li>✅ No backend or database needed</li>       <li>🔐 Secure and spam-resistant</li>       <li>📧 Sends form submissions straight to your email</li>     </ul>      <a href=\"https://ajaynegi45.github.io/FormMaillyGo/\" target=\"_blank\" style=\"display:inline-block; background-color:#007bff; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:4px; font-size:16px; margin-top:20px;\">       Try FormMaillyGo Now     </a>      <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 30px 0 0 0;\">       Whether you're a developer, freelancer, or small business – simplify your form submissions today!     </p>      <div style=\"text-align:center; color:#999999; font-size:12px; margin-top:40px;\">       You are receiving this email because we thought you’d love this tool.<br>       © 2025 FormMaillyGo Project     </div>   </div> </body>",
-                "product_name": "Uttarakhand Culture"
-            }, {
-                "sent_to": "formmailly@gmail.com",
-                "subject": "Inquiry about product",
-                "message": "<body style=\"margin:0; padding:0; font-family: Arial, sans-serif; background-color: #f4f4f4;\">   <div style=\"max-width:600px; margin:0 auto; background-color:#ffffff; border:1px solid #e0e0e0; padding:30px;\">     <h1 style=\"color:#333333; font-size:24px;\">Introducing FormMaillyGo 🚀</h1>     <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0;\">       Looking for a fast, reliable, and free solution to handle contact form submissions without a backend?     </p>      <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0;\">       <strong>FormMaillyGo</strong> lets you connect any HTML form to your email inbox in seconds – no server or backend coding required.     </p>      <ul style=\"color:#555555; font-size:16px; line-height:1.6; margin: 16px 0; padding-left:20px;\">       <li>⚡ Free & open-source</li>       <li>✅ No backend or database needed</li>       <li>🔐 Secure and spam-resistant</li>       <li>📧 Sends form submissions straight to your email</li>     </ul>      <a href=\"https://ajaynegi45.github.io/FormMaillyGo/\" target=\"_blank\" style=\"display:inline-block; background-color:#007bff; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:4px; font-size:16px; margin-top:20px;\">       Try FormMaillyGo Now     </a>      <p style=\"color:#555555; font-size:16px; line-height:1.6; margin: 30px 0 0 0;\">       Whether you're a developer, freelancer, or small business – simplify your form submissions today!     </p>      <div style=\"text-align:center; color:#999999; font-size:12px; margin-top:40px;\">       You are receiving this email because we thought you’d love this tool.<br>       © 2025 FormMaillyGo Project     </div>   </div> </body>",
-                "product_name": "Uttarakhand Culture"
-            }
-        ]
-
-        const url = "http://localhost:8080/api/batch/contact";
-
-        // Make POST request
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Connection": "keep-alive"
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to connect to SSE");
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = "";
-
-                const read = () => {
-                    reader.read().then(({done, value}) => {
-                        if (done) return;
-
-                        buffer += decoder.decode(value, {stream: true});
-
-                        let parts = buffer.split("\n\n");
-
-                        // Check if the last part is incomplete
-                        if (!buffer.endsWith("\n\n")) {
-                            buffer = parts.pop(); // save the incomplete part
-                        } else {
-                            buffer = "";
-                        }
-
-                        for (let part of parts) {
-                            if (part.startsWith("data:")) {
-                                const jsonStr = part.replace(/^data:\s*/, "");
-                                try {
-                                    const update = JSON.parse(jsonStr);
-                                    console.log("Received update:", update);
-                                    displayStatus(update);
-                                } catch (err) {
-                                    console.error("Failed to parse JSON:", err, jsonStr);
-                                }
-                            }
-                        }
-
-                        read(); // continue reading
-                    }).catch(error => {
-                        console.error("Stream read error:", error);
-                    });
-                };
-
-                read();
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to connect or send data to backend.");
-            });
+    function copyCode(codeId, btnId) {
+        const text = document.getElementById(codeId).innerText;
+        const button = document.getElementById(btnId);
+        navigator.clipboard.writeText(text).then(() => {
+            button.textContent = "Copied!";
+            button.classList.add("copied");
+            setTimeout(() => {
+                button.textContent = "Copy";
+                button.classList.remove("copied");
+            }, 5000);
+        });
     }
-
-    let processedCount = 0;
-
-    function displayStatus(update) {
-        processedCount++;
-        const li = document.createElement("li");
-        li.textContent = `${processedCount}. ${update.email} - ${update.status}`;
-        li.className = update.status === "success" ? "success" : "failed";
-
-        if (update.error) {
-            li.textContent += ` (Error: ${update.error})`;
-        }
-
-        document.getElementById("statusList").appendChild(li);
-    }
-
 </script>
+
 
 </body>
 </html>

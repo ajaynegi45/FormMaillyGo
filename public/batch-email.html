@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormMaillyGo - JSON API Testing Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <h1 class="app-title">FormMaillyGo</h1>
+                        <p class="app-subtitle">Send JSON array data to APIs and stream responses</p>
+                    </div>
+                    <button class="btn btn--outline theme-toggle" id="themeToggle">
+                        <span class="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="app-grid">
+                    <!-- Left Panel - Input and Configuration -->
+                    <div class="left-panel">
+                        <!-- JSON Input Section -->
+                        <section class="card json-input-section">
+                            <div class="card__header">
+                                <h3>JSON Data Input</h3>
+                                <div class="validation-status" id="validationStatus">
+                                    <span class="status status--info" id="validationIndicator">Enter JSON</span>
+                                </div>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label for="jsonInput" class="form-label">JSON Array Data</label>
+                                    <textarea 
+                                        id="jsonInput" 
+                                        class="form-control json-textarea" 
+                                        rows="10"
+                                        placeholder='[{"name": "John Doe", "email": "john@example.com"}, {"name": "Jane Smith", "email": "jane@example.com"}]'
+                                    ></textarea>
+                                    <div class="input-footer">
+                                        <span class="char-count" id="charCount">0 characters</span>
+                                        <button class="btn btn--sm btn--secondary" id="validateBtn">Validate JSON</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- API Configuration Section -->
+                        <section class="card api-config-section">
+                            <div class="card__header">
+                                <h3>API Configuration</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label for="apiUrl" class="form-label">API Endpoint URL</label>
+                                    <input type="url" id="apiUrl" class="form-control" placeholder="https://api.example.com/endpoint">
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="httpMethod" class="form-label">HTTP Method</label>
+                                        <select id="httpMethod" class="form-control">
+                                            <option value="GET">GET</option>
+                                            <option value="POST" selected>POST</option>
+                                            <option value="PUT">PUT</option>
+                                            <option value="PATCH">PATCH</option>
+                                            <option value="DELETE">DELETE</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Headers Section -->
+                                <div class="headers-section">
+                                    <h4 class="section-title">Headers <span class="optional">(Optional)</span></h4>
+                                    <div class="headers-list" id="headersList">
+                                        <div class="header-row">
+                                            <input type="text" class="form-control header-key" placeholder="Header Name">
+                                            <input type="text" class="form-control header-value" placeholder="Header Value">
+                                            <button class="btn btn--sm btn--outline remove-header">×</button>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn--sm btn--secondary" id="addHeader">+ Add Header</button>
+                                </div>
+
+                                <!-- Authentication Section -->
+                                <div class="auth-section">
+                                    <h4 class="section-title">Authentication <span class="optional">(Optional)</span></h4>
+                                    <div class="form-group">
+                                        <label for="authType" class="form-label">Auth Type</label>
+                                        <select id="authType" class="form-control">
+                                            <option value="none">None</option>
+                                            <option value="bearer">Bearer Token</option>
+                                            <option value="apikey">API Key</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group auth-input-group hidden" id="authInputGroup">
+                                        <label for="authValue" class="form-label" id="authLabel">Token/Key</label>
+                                        <input type="password" id="authValue" class="form-control" placeholder="Enter your token or API key">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Action Buttons -->
+                        <section class="action-buttons">
+                            <button class="btn btn--primary btn--lg" id="sendRequest" disabled>
+                                <span class="btn-text">Send Request</span>
+                                <span class="loading-spinner hidden" id="loadingSpinner">⏳</span>
+                            </button>
+                            <button class="btn btn--outline btn--lg" id="clearAll">Clear All</button>
+                        </section>
+                    </div>
+
+                    <!-- Right Panel - Response and History -->
+                    <div class="right-panel">
+                        <!-- Response Section -->
+                        <section class="card response-section">
+                            <div class="card__header">
+                                <h3>Response</h3>
+                                <div class="response-actions hidden" id="responseActions">
+                                    <button class="btn btn--sm btn--secondary" id="copyResponse">Copy Response</button>
+                                    <button class="btn btn--sm btn--secondary" id="exportResponse">Export JSON</button>
+                                </div>
+                            </div>
+                            <div class="card__body">
+                                <div class="response-container" id="responseContainer">
+                                    <div class="response-placeholder">
+                                        <p>Send a request to see the response here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- History Section -->
+                        <section class="card history-section">
+                            <div class="card__header">
+                                <h3>Request History</h3>
+                                <button class="btn btn--sm btn--outline" id="clearHistory">Clear</button>
+                            </div>
+                            <div class="card__body">
+                                <div class="history-list" id="historyList">
+                                    <p class="history-placeholder">No requests yet</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    <script>
+        // FormMaillyGo JavaScript Application
+
+        class FormMaillyGo {
+            constructor() {
+                this.elements = this.initializeElements();
+                this.requestHistory = this.loadHistory();
+                this.currentResponse = null;
+
+                this.initializeEventListeners();
+                this.initializeTheme();
+                this.updateHistoryDisplay();
+                this.populateSampleData();
+            }
+
+            initializeElements() {
+                return {
+                    // JSON Input
+                    jsonInput: document.getElementById('jsonInput'),
+                    charCount: document.getElementById('charCount'),
+                    validateBtn: document.getElementById('validateBtn'),
+                    validationIndicator: document.getElementById('validationIndicator'),
+
+                    // API Configuration
+                    apiUrl: document.getElementById('apiUrl'),
+                    httpMethod: document.getElementById('httpMethod'),
+                    headersList: document.getElementById('headersList'),
+                    addHeader: document.getElementById('addHeader'),
+                    authType: document.getElementById('authType'),
+                    authInputGroup: document.getElementById('authInputGroup'),
+                    authValue: document.getElementById('authValue'),
+                    authLabel: document.getElementById('authLabel'),
+
+                    // Actions
+                    sendRequest: document.getElementById('sendRequest'),
+                    clearAll: document.getElementById('clearAll'),
+                    loadingSpinner: document.getElementById('loadingSpinner'),
+
+                    // Response
+                    responseContainer: document.getElementById('responseContainer'),
+                    responseActions: document.getElementById('responseActions'),
+                    copyResponse: document.getElementById('copyResponse'),
+                    exportResponse: document.getElementById('exportResponse'),
+
+                    // History
+                    historyList: document.getElementById('historyList'),
+                    clearHistory: document.getElementById('clearHistory'),
+
+                    // Theme
+                    themeToggle: document.getElementById('themeToggle'),
+
+                    // Toast
+                    toast: document.getElementById('toast'),
+                    toastMessage: document.getElementById('toastMessage')
+                };
+            }
+
+            initializeEventListeners() {
+                // JSON Input Events
+                this.elements.jsonInput.addEventListener('input', () => this.handleJsonInput());
+                this.elements.validateBtn.addEventListener('click', () => this.validateJson());
+
+                // API Configuration Events
+                this.elements.addHeader.addEventListener('click', () => this.addHeaderRow());
+                this.elements.authType.addEventListener('change', () => this.handleAuthTypeChange());
+
+                // Action Events
+                this.elements.sendRequest.addEventListener('click', () => this.sendRequest());
+                this.elements.clearAll.addEventListener('click', () => this.clearAll());
+
+                // Response Events
+                this.elements.copyResponse.addEventListener('click', () => this.copyResponse());
+                this.elements.exportResponse.addEventListener('click', () => this.exportResponse());
+
+                // History Events
+                this.elements.clearHistory.addEventListener('click', () => this.clearHistory());
+
+                // Theme Events
+                this.elements.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                // URL validation
+                this.elements.apiUrl.addEventListener('input', () => this.validateForm());
+
+                // Initial header row setup
+                this.setupHeaderRowEvents();
+            }
+
+            populateSampleData() {
+                // Add sample JSON data
+                const sampleJson = '[{"name": "John Doe", "email": "john@example.com"}, {"name": "Jane Smith", "email": "jane@example.com"}]';
+                this.elements.jsonInput.value = sampleJson;
+
+                // Add sample API URL
+                this.elements.apiUrl.value = 'https://jsonplaceholder.typicode.com/posts';
+
+                // Validate initial state
+                this.handleJsonInput();
+                this.validateForm();
+            }
+
+            handleJsonInput() {
+                const value = this.elements.jsonInput.value;
+                this.elements.charCount.textContent = `${value.length} characters`;
+
+                if (value.trim() === '') {
+                    this.updateValidationStatus('info', 'Enter JSON');
+                    this.elements.jsonInput.className = 'form-control json-textarea';
+                    this.validateForm();
+                    return;
+                }
+
+                this.validateJson();
+            }
+
+            validateJson() {
+                const value = this.elements.jsonInput.value.trim();
+
+                if (!value) {
+                    this.updateValidationStatus('info', 'Enter JSON');
+                    this.elements.jsonInput.className = 'form-control json-textarea';
+                    this.validateForm();
+                    return;
+                }
+
+                try {
+                    const parsed = JSON.parse(value);
+                    if (Array.isArray(parsed)) {
+                        this.updateValidationStatus('success', 'Valid JSON Array');
+                        this.elements.jsonInput.className = 'form-control json-textarea valid';
+                    } else {
+                        this.updateValidationStatus('warning', 'Valid JSON (Not Array)');
+                        this.elements.jsonInput.className = 'form-control json-textarea valid';
+                    }
+                } catch (error) {
+                    this.updateValidationStatus('error', 'Invalid JSON');
+                    this.elements.jsonInput.className = 'form-control json-textarea invalid';
+                }
+
+                this.validateForm();
+            }
+
+            updateValidationStatus(type, message) {
+                const indicator = this.elements.validationIndicator;
+                indicator.className = `status status--${type}`;
+                indicator.textContent = message;
+            }
+
+            validateForm() {
+                const hasValidJson = this.elements.jsonInput.value.trim() &&
+                    !this.elements.jsonInput.classList.contains('invalid');
+                const hasValidUrl = this.isValidUrl(this.elements.apiUrl.value);
+
+                this.elements.sendRequest.disabled = !(hasValidJson && hasValidUrl);
+            }
+
+            isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            setupHeaderRowEvents() {
+                const headerRows = this.elements.headersList.querySelectorAll('.header-row');
+                headerRows.forEach(row => {
+                    const removeBtn = row.querySelector('.remove-header');
+                    removeBtn.addEventListener('click', () => this.removeHeaderRow(row));
+                });
+            }
+
+            addHeaderRow() {
+                const headerRow = document.createElement('div');
+                headerRow.className = 'header-row';
+                headerRow.innerHTML = `
+            <input type="text" class="form-control header-key" placeholder="Header Name">
+            <input type="text" class="form-control header-value" placeholder="Header Value">
+            <button class="btn btn--sm btn--outline remove-header">×</button>
+        `;
+
+                this.elements.headersList.appendChild(headerRow);
+
+                const removeBtn = headerRow.querySelector('.remove-header');
+                removeBtn.addEventListener('click', () => this.removeHeaderRow(headerRow));
+            }
+
+            removeHeaderRow(row) {
+                row.remove();
+            }
+
+            handleAuthTypeChange() {
+                const authType = this.elements.authType.value;
+                const inputGroup = this.elements.authInputGroup;
+                const label = this.elements.authLabel;
+
+                if (authType === 'none') {
+                    inputGroup.classList.add('hidden');
+                } else {
+                    inputGroup.classList.remove('hidden');
+                    label.textContent = authType === 'bearer' ? 'Bearer Token' : 'API Key';
+                    this.elements.authValue.placeholder = authType === 'bearer' ?
+                        'Enter your bearer token' : 'Enter your API key';
+                }
+            }
+
+            async sendRequest() {
+                const requestData = this.gatherRequestData();
+
+                if (!requestData) return;
+
+                this.setLoadingState(true);
+
+                try {
+                    const response = await this.makeApiRequest(requestData);
+                    this.handleResponse(response, requestData);
+                    this.saveToHistory(requestData, response);
+                } catch (error) {
+                    this.handleError(error, requestData);
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+
+            gatherRequestData() {
+                try {
+                    const jsonData = JSON.parse(this.elements.jsonInput.value);
+                    const url = this.elements.apiUrl.value;
+                    const method = this.elements.httpMethod.value;
+
+                    // Gather headers
+                    const headers = { 'Content-Type': 'application/json' };
+                    const headerRows = this.elements.headersList.querySelectorAll('.header-row');
+
+                    headerRows.forEach(row => {
+                        const key = row.querySelector('.header-key').value.trim();
+                        const value = row.querySelector('.header-value').value.trim();
+                        if (key && value) {
+                            headers[key] = value;
+                        }
+                    });
+
+                    // Add authentication
+                    const authType = this.elements.authType.value;
+                    const authValue = this.elements.authValue.value.trim();
+
+                    if (authType === 'bearer' && authValue) {
+                        headers['Authorization'] = `Bearer ${authValue}`;
+                    } else if (authType === 'apikey' && authValue) {
+                        headers['X-API-Key'] = authValue;
+                    }
+
+                    return {
+                        url,
+                        method,
+                        headers,
+                        data: jsonData,
+                        timestamp: new Date().toISOString()
+                    };
+                } catch (error) {
+                    this.showToast('Error gathering request data: ' + error.message);
+                    return null;
+                }
+            }
+
+            async makeApiRequest(requestData) {
+                const options = {
+                    method: requestData.method,
+                    headers: requestData.headers,
+                    mode: 'cors'
+                };
+
+                // Add body for methods that support it
+                if (['POST', 'PUT', 'PATCH'].includes(requestData.method)) {
+                    options.body = JSON.stringify(requestData.data);
+                }
+
+                const response = await fetch(requestData.url, options);
+
+                let responseData;
+                const contentType = response.headers.get('content-type');
+
+                if (contentType && contentType.includes('application/json')) {
+                    responseData = await response.json();
+                } else {
+                    responseData = await response.text();
+                }
+
+                return {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    data: responseData,
+                    ok: response.ok
+                };
+            }
+
+            handleResponse(response, requestData) {
+                this.currentResponse = response;
+                this.displayResponse(response, requestData);
+                this.elements.responseActions.classList.remove('hidden');
+                this.showToast('Request completed successfully!');
+            }
+
+            handleError(error, requestData) {
+                const errorResponse = {
+                    status: 0,
+                    statusText: 'Network Error',
+                    headers: {},
+                    data: { error: error.message },
+                    ok: false
+                };
+
+                this.currentResponse = errorResponse;
+                this.displayResponse(errorResponse, requestData);
+                this.showToast('Request failed: ' + error.message);
+            }
+
+            displayResponse(response, requestData) {
+                const container = this.elements.responseContainer;
+
+                const statusClass = response.ok ? 'success' : 'error';
+                const responseTime = new Date().toLocaleTimeString();
+
+                container.innerHTML = `
+            <div class="response-content">
+                <div class="response-status">
+                    <span class="status-code ${statusClass}">${response.status}</span>
+                    <span class="status-text">${response.statusText}</span>
+                    <span class="response-time">${responseTime}</span>
+                </div>
+
+                <div class="response-headers">
+                    <button class="headers-toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        View Headers (${Object.keys(response.headers).length})
+                    </button>
+                    <div class="headers-content hidden">
+                        ${this.formatHeaders(response.headers)}
+                    </div>
+                </div>
+
+                <div class="response-body ${response.ok ? '' : 'error-content'}">
+                    ${this.formatJsonResponse(response.data)}
+                </div>
+            </div>
+        `;
+            }
+
+            formatHeaders(headers) {
+                return Object.entries(headers)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join('\n');
+            }
+
+            formatJsonResponse(data) {
+                if (typeof data === 'string') {
+                    return data;
+                }
+
+                try {
+                    return this.syntaxHighlightJson(JSON.stringify(data, null, 2));
+                } catch {
+                    return String(data);
+                }
+            }
+
+            syntaxHighlightJson(json) {
+                return json
+                    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?)/g, (match, string) => {
+                        if (string.endsWith(':')) {
+                            return `<span class="json-key">${match}</span>`;
+                        } else {
+                            return `<span class="json-string">${match}</span>`;
+                        }
+                    })
+                    .replace(/\b(-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)\b/g, '<span class="json-number">$1</span>')
+                    .replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>')
+                    .replace(/\bnull\b/g, '<span class="json-null">null</span>');
+            }
+
+            setLoadingState(loading) {
+                const btn = this.elements.sendRequest;
+                const spinner = this.elements.loadingSpinner;
+                const btnText = btn.querySelector('.btn-text');
+
+                if (loading) {
+                    btn.disabled = true;
+                    btnText.textContent = 'Sending...';
+                    spinner.classList.remove('hidden');
+                } else {
+                    btn.disabled = false;
+                    btnText.textContent = 'Send Request';
+                    spinner.classList.add('hidden');
+                    this.validateForm();
+                }
+            }
+
+            copyResponse() {
+                if (!this.currentResponse) return;
+
+                const textToCopy = typeof this.currentResponse.data === 'string'
+                    ? this.currentResponse.data
+                    : JSON.stringify(this.currentResponse.data, null, 2);
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    this.showToast('Response copied to clipboard!');
+                }).catch(() => {
+                    this.showToast('Failed to copy response');
+                });
+            }
+
+            exportResponse() {
+                if (!this.currentResponse) return;
+
+                const dataToExport = {
+                    timestamp: new Date().toISOString(),
+                    status: this.currentResponse.status,
+                    headers: this.currentResponse.headers,
+                    data: this.currentResponse.data
+                };
+
+                const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
+                    type: 'application/json'
+                });
+
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `formmaillygo-response-${Date.now()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                this.showToast('Response exported successfully!');
+            }
+
+            saveToHistory(requestData, response) {
+                const historyItem = {
+                    id: Date.now(),
+                    url: requestData.url,
+                    method: requestData.method,
+                    timestamp: requestData.timestamp,
+                    status: response.status,
+                    data: requestData.data
+                };
+
+                this.requestHistory.unshift(historyItem);
+
+                // Keep only last 5 requests
+                if (this.requestHistory.length > 5) {
+                    this.requestHistory = this.requestHistory.slice(0, 5);
+                }
+
+                this.saveHistory();
+                this.updateHistoryDisplay();
+            }
+
+            updateHistoryDisplay() {
+                const container = this.elements.historyList;
+
+                if (this.requestHistory.length === 0) {
+                    container.innerHTML = '<p class="history-placeholder">No requests yet</p>';
+                    return;
+                }
+
+                container.innerHTML = this.requestHistory.map(item => `
+            <div class="history-item" onclick="formMaillyGo.loadFromHistory(${item.id})">
+                <div class="history-method">${item.method}</div>
+                <div class="history-url">${item.url}</div>
+                <div class="history-time">${new Date(item.timestamp).toLocaleString()}</div>
+            </div>
+        `).join('');
+            }
+
+            loadFromHistory(id) {
+                const item = this.requestHistory.find(h => h.id === id);
+                if (!item) return;
+
+                this.elements.apiUrl.value = item.url;
+                this.elements.httpMethod.value = item.method;
+                this.elements.jsonInput.value = JSON.stringify(item.data, null, 2);
+
+                this.handleJsonInput();
+                this.validateForm();
+                this.showToast('Request loaded from history');
+            }
+
+            clearHistory() {
+                this.requestHistory = [];
+                this.saveHistory();
+                this.updateHistoryDisplay();
+                this.showToast('History cleared');
+            }
+
+            clearAll() {
+                this.elements.jsonInput.value = '';
+                this.elements.apiUrl.value = '';
+                this.elements.httpMethod.value = 'POST';
+                this.elements.authType.value = 'none';
+                this.elements.authValue.value = '';
+
+                // Clear headers except first row
+                const headerRows = this.elements.headersList.querySelectorAll('.header-row');
+                headerRows.forEach((row, index) => {
+                    if (index === 0) {
+                        row.querySelector('.header-key').value = '';
+                        row.querySelector('.header-value').value = '';
+                    } else {
+                        row.remove();
+                    }
+                });
+
+                // Reset response
+                this.elements.responseContainer.innerHTML = `
+            <div class="response-placeholder">
+                <p>Send a request to see the response here</p>
+            </div>
+        `;
+                this.elements.responseActions.classList.add('hidden');
+
+                this.handleAuthTypeChange();
+                this.handleJsonInput();
+                this.showToast('All fields cleared');
+            }
+
+            initializeTheme() {
+                const savedTheme = localStorage.getItem('formmaillygo-theme') || 'light';
+                this.setTheme(savedTheme);
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-color-scheme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+            }
+
+            setTheme(theme) {
+                document.documentElement.setAttribute('data-color-scheme', theme);
+                localStorage.setItem('formmaillygo-theme', theme);
+
+                const icon = this.elements.themeToggle.querySelector('.theme-icon');
+                icon.textContent = theme === 'light' ? '🌙' : '☀️';
+            }
+
+            loadHistory() {
+                try {
+                    const saved = localStorage.getItem('formmaillygo-history');
+                    return saved ? JSON.parse(saved) : [];
+                } catch {
+                    return [];
+                }
+            }
+
+            saveHistory() {
+                try {
+                    localStorage.setItem('formmaillygo-history', JSON.stringify(this.requestHistory));
+                } catch (error) {
+                    console.warn('Failed to save history:', error);
+                }
+            }
+
+            showToast(message) {
+                this.elements.toastMessage.textContent = message;
+                this.elements.toast.classList.add('show');
+
+                setTimeout(() => {
+                    this.elements.toast.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        let formMaillyGo;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            formMaillyGo = new FormMaillyGo();
+        });
+
+        // Export for global access
+        window.formMaillyGo = formMaillyGo;
+    </script>
+</body>
+</html>
