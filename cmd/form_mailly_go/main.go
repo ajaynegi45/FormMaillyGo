@@ -34,7 +34,7 @@ func main() {
 	mux.HandleFunc("GET /api/runtime-info", handler.RuntimeInfoHandler)
 	mux.HandleFunc("GET /api/metrics", handler.MetricsHandler)
 
-	//mux.HandleFunc("POST /api/contact", handler.ContactHandler)
+	mux.HandleFunc("POST /api/contact", handler.ContactHandler)
 	mux.HandleFunc("POST /api/batch/contact", handler.BatchEmailProcessor)
 
 	server := &http.Server{
